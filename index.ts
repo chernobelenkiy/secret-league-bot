@@ -8,10 +8,6 @@ const PAYMENT_REPLY: InlineKeyboardButton[][] = [
   [{ text: 'Начать обучение', callback_data: 'payment', pay: true }]
 ];
 
-const AFTER_PAYMENT_REPLY: InlineKeyboardButton[][] = [
-  [{ text: 'Перейти в основной канал.', url: 'https://t.me/secret_league' }]
-];
-
 bot.onText(/\/start/, async (msg) => {
   bot.sendMessage(msg.chat.id,
     'Привет! Тебя приветствует бот Тайной Лиги Леди и Джентльментов.', {
@@ -42,13 +38,10 @@ bot.on('callback_query', (query) => {
 bot.on('message', (msg) => {
   if (msg.successful_payment) {
     bot.sendMessage(msg.chat.id, 
-    'Отлично! Теперь переходи в основной канал!', 
-    {
-      parse_mode: 'HTML',
-      reply_markup: {
-        inline_keyboard: AFTER_PAYMENT_REPLY
-      }
-    });
+    `
+      Отлично! Теперь переходи в основной канал!
+      <a href="${process.env.INVITE_LINK}">Тайная Лига Леди и Джентльменов</a>
+    `, { parse_mode: 'HTML'});
   }
 })
 
