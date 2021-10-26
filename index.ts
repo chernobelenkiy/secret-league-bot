@@ -5,7 +5,8 @@ require('dotenv').config();
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 
 const PAYMENT_REPLY: InlineKeyboardButton[][] = [
-  [{ text: 'Начать обучение', callback_data: 'payment', pay: true }]
+  [{ text: 'Оплатить взнос', callback_data: 'payment', pay: true }],
+  [{ text: 'Перейти в основной канал', url: 'https://t.me/secret_league' }]
 ];
 
 bot.onText(/\/start/, async (msg) => {
