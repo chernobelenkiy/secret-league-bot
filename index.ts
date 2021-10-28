@@ -42,14 +42,3 @@ bot.on('callback_query', (query) => {
     // );
   }
 });
-
-bot.on('message', (msg) => {
-  if (msg.successful_payment) {
-    bot.sendMessage(msg.chat.id, 
-    `
-      Отлично! Теперь переходи в основной канал!
-      <a href="${process.env.INVITE_LINK}">Тайная Лига Леди и Джентльменов</a>
-    `, { parse_mode: 'HTML'});
-  }
-})
-
