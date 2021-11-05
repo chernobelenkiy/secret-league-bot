@@ -3,7 +3,7 @@ require('dotenv').config();
 import TelegramBot, { InlineKeyboardButton } from 'node-telegram-bot-api';
 
 //@ts-ignore
-const bot = new TelegramBot(process.env.SECRET_LEAGUE, {polling: true});
+const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 
 const PAYMENT_REPLY: InlineKeyboardButton[][] = [
   [{ text: 'Я честно оплатил взнос!', callback_data: 'payment' }]
