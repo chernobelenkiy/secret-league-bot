@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import http from 'http';
 import TelegramBot, { InlineKeyboardButton } from 'node-telegram-bot-api';
 
 dotenv.config();
@@ -43,3 +44,7 @@ bot.on('callback_query', (query) => {
     // );
   }
 });
+
+http.createServer((_, res) => {
+  res.writeHead(200, 'ok');
+}).listen(process.env.PORT || 5000);
