@@ -18,8 +18,6 @@
   },
   "homepage": "https://github.com/chernobelenkiy/secret-league-bot#readme",
   "devDependencies": {
-    "@types/node": "^16.11.4",
-    "@types/node-telegram-bot-api": "^0.53.1",
     "nodemon": "^2.0.14"
   },
   "dependencies": {
