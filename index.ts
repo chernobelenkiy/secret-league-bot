@@ -1,7 +1,7 @@
-require('dotenv').config();
-
+import dotenv from 'dotenv';
 import TelegramBot, { InlineKeyboardButton } from 'node-telegram-bot-api';
 
+dotenv.config();
 //@ts-ignore
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 

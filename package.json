@@ -21,6 +21,8 @@
     "nodemon": "^2.0.14"
   },
   "dependencies": {
+    "@types/node": "^16.11.4",
+    "@types/node-telegram-bot-api": "^0.53.1",
     "dotenv": "^10.0.0",
     "node-fetch": "^3.0.0",
     "node-telegram-bot-api": "^0.54.0",
