@@ -4,7 +4,8 @@
   "description": "secret league school bot",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.ts"
+    "start": "ts-node index.ts",
+    "dev": "nodemon index.ts"
   },
   "repository": {
     "type": "git",
