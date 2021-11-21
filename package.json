@@ -4,7 +4,8 @@
   "description": "secret league school bot",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.ts"
+    "start": "ts-node ./index.ts",
+    "dev": "nodemon index.ts"
   },
   "repository": {
     "type": "git",
@@ -17,16 +18,16 @@
   },
   "homepage": "https://github.com/chernobelenkiy/secret-league-bot#readme",
   "devDependencies": {
+    "nodemon": "^2.0.14"
+  },
+  "dependencies": {
     "@types/node": "^16.11.4",
     "@types/node-telegram-bot-api": "^0.53.1",
     "dotenv": "^10.0.0",
     "node-fetch": "^3.0.0",
-    "nodemon": "^2.0.14",
+    "node-telegram-bot-api": "^0.54.0",
     "ts-node": "^10.4.0",
     "tslib": "^2.3.1",
     "typescript": "^4.4.4"
-  },
-  "dependencies": {
-    "node-telegram-bot-api": "^0.54.0"
   }
 }
