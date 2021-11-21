@@ -11,10 +11,7 @@ bot.onText(/\/start/, async (msg) => {
   bot.sendMessage(msg.chat.id,
     'Привет! Тебя приветствует бот Тайной Лиги Леди и Джентльментов.' +
     '\n\nЗапись на обучение закрыта.', {
-      parse_mode: 'HTML',
-      reply_markup: {
-        inline_keyboard: PAYMENT_REPLY,
-      }
+      parse_mode: 'HTML'
     });
 });
 

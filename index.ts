@@ -1,8 +1,9 @@
-import './bots';
 import dotenv from 'dotenv';
 import http from 'http';
 
 dotenv.config();
+
+import './bots';
 
 http.createServer((_, res) => {
   res.writeHead(200, 'ok');

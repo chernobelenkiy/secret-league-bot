@@ -1,2 +1,2 @@
 import './secretLeague';
-import './enkitBoy';
+import './enkiyBoy';
