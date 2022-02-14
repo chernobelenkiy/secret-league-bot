@@ -10,7 +10,7 @@ const PAYMENT_REPLY: InlineKeyboardButton[][] = [
 bot.onText(/\/start/, async (msg) => {
   bot.sendMessage(msg.chat.id,
     'Привет! Тебя приветствует бот Тайной Лиги Леди и Джентльментов.' +
-    '\n\nЗапись на обучение закрыта.', {
+    '\n\nЗапись на обучение закрыта!!!!', {
       parse_mode: 'HTML'
     });
 });
