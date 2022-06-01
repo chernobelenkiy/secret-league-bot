@@ -11,8 +11,8 @@ const menu =  {
   ])
 }
 
-bot.start((ctx) => ctx.reply('<b>Меню</b>', menu));
-bot.command('start', (ctx) =>  ctx.reply('<b>Меню</b>', menu));
+bot.start((ctx) => ctx.reply('Привет, человек! Добро пожаловать на развилку.', menu));
+bot.command('start', (ctx) =>  ctx.reply('Привет, человек! Добро пожаловать на развилку.', menu));
 
 
 bot.launch()
