@@ -1,3 +1,4 @@
 // import './secretLeague';
 require('./enkiyBoy');
-require('./belayMamba')
+require('./belayMamba');
+require('./improveYourCVBot');
