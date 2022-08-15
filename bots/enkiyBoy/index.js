@@ -1,6 +1,7 @@
 const { Telegraf, Markup } = require('telegraf');
 
 //https://github.com/telegraf/telegraf/tree/v4/docs/examples
+//heroku ps:scale web=0
 
 const bot = new Telegraf(process.env.ENKIY);
 

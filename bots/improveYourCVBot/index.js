@@ -1,4 +1,37 @@
 const { Telegraf, Markup } = require('telegraf');
+const _ = require('lodash');
+const notion = require('../../db/notion.js');
+
+const createStep = async (page) => {
+  const id = page.id;
+  const keys = Object.keys(page.properties);
+  const props = keys.map(key => ({
+    page_id: id,
+    property_id: page.properties[key].id
+  }));
+
+  Promise.all(props.map(p => notion.pages.properties.retrieve(p))).then(results => {
+    results.forEach((res, i) => {
+      console.log('++++++ ', keys[i])
+      if (res.type === 'number') {
+        console.log(res.number);
+      } else {
+        if (res.results[0]) {
+          console.log(res.results[0]);
+        }
+      }
+    })
+  })
+  // console.log(response);
+}
+
+(async () => {
+  const response = await notion.databases.query({
+    database_id: "93b82d4e1dca45c2b47ab6d9bc86113e",
+  });
+
+  createStep(_.reverse(response.results)[0]);
+})();
 
 const bot = new Telegraf(process.env.IMPROVE_YOUR_CV);
 
