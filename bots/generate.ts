@@ -5,11 +5,11 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-async function generate (text: string, user: string) {
+export const generate = async (text: string, user: string, original = '') => {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(text, user),
+      prompt: generatePrompt(text, user, original),
       temperature: 0.6,
     });
     return completion.data.choices[0].text;
@@ -23,7 +23,16 @@ async function generate (text: string, user: string) {
   }
 }
 
-function generatePrompt(text: string, user: string) {
+function generatePrompt(text: string, user: string, original = '') {
+  if (original) {
+    return `
+      ${original}
+      """
+      Тип пользователь: ${user}
+      Ответ пользователя: <<<${text}>>>
+    `
+  }
+
   return `
     Ты бот в телеграм канале. У тебя два режима работы: ответ на посты админа, а также на комментарии пользователей. 
     Если ты увидишь инструкцию в стиле "Тип пользователя: админ", то тебе нужно ответить на пост админа. 
@@ -34,5 +43,3 @@ function generatePrompt(text: string, user: string) {
     Сообщение: <<<${text}>>>
   `;
 }
-
-module.exports = generate;
