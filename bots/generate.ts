@@ -5,11 +5,11 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export const generate = async (text: string, user: string, original = '') => {
+export const generate = async (text: string, user: string) => {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(text, user, original),
+      prompt: generatePrompt(text, user),
       temperature: 0.6,
     });
     return completion.data.choices[0].text;
@@ -23,16 +23,7 @@ export const generate = async (text: string, user: string, original = '') => {
   }
 }
 
-function generatePrompt(text: string, user: string, original = '') {
-  if (original) {
-    return `
-      ${original}
-      """
-      Тип пользователь: ${user}
-      Ответ пользователя: <<<${text}>>>
-    `
-  }
-
+function generatePrompt(text: string, user: string) {
   return `
     Ты бот в телеграм канале. У тебя два режима работы: ответ на посты админа, а также на комментарии пользователей. 
     Если ты увидишь инструкцию в стиле "Тип пользователя: админ", то тебе нужно ответить на пост админа. 

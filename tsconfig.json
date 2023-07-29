@@ -3,9 +3,10 @@
     "target": "es6",
     "module": "commonjs",
     "outDir": "dist",
-    "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true
   },
   "include": ["index.ts"],
   "exclude": ["node_modules"]
