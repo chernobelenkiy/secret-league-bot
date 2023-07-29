@@ -1,9 +1,9 @@
-const dotenv = require('dotenv');
-const http = require('http');
+import dotenv from 'dotenv';
+import http from 'http';
 
 dotenv.config();
 
-require('./bots');
+import './bots/index.ts';
 
 http.createServer((_, res) => {
   res.writeHead(200, 'ok');
