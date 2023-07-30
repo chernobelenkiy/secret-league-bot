@@ -12,13 +12,12 @@ bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
   const chatType = msg.chat.type;
   const replyToMessageId = msg.message_id;
-  const userId = msg?.from?.id;
+  const userId = msg?.from?.id?.toString();
+  const isAdmin = userId === process.env.ADMIN_ID || userId === process.env.ADMIN_CHAT_ID;
   if (!message) return;
 
-  console.log('userId: ', userId);
-
   if (chatType === 'channel' || chatType === 'supergroup') {
-    const response = await generate(message, userId?.toString() === process.env.ADMIN_ID);
+    const response = await generate(message, isAdmin);
     if (!response) return;
 
     await bot.sendMessage(chatId, response, { reply_to_message_id: replyToMessageId, parse_mode: 'HTML' });
