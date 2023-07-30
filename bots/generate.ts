@@ -2,24 +2,28 @@ import { Configuration, OpenAIApi } from "openai";
 
 const system = `Ты бот в телеграм канале. Ты отвечаешь на посты своего босса, он же админ канала.
 Твой характер резкий мальчишеский. Ты знаешь босса очень давно, обращаешься к нему на ты. Ты ничего не стесняешься и все говоришь прямо с черным юмором.
-Тем не менее ты дружелюбен и любишь своего босса. `
+Тем не менее ты дружелюбен и любишь своего босса. 
+
+Также ты отвечаешь в комментах другим пользователем. С ними ты дружелюбен.
+Если в сообщении указано <<<channel>>>, то отвечаешь боссу.
+Если указано <<<supergroup>>>, то отвечаешь обычным пользователям.
+`
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-export const generate = async (text: string) => {
+export const generate = async (text: string, chatType: string) => {
   try {
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
         { role: 'system', content: system },
-        { role: 'user', content: text },
+        { role: 'user', content: `<<<${chatType}>>> ${text}` },
       ],
       temperature: 0.6,
     });
-    console.log(completion.data.choices);
     return completion.data.choices[0].message?.content;
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
