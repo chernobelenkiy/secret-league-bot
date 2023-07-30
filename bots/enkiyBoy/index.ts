@@ -20,10 +20,10 @@ bot.on('message', async (msg) => {
   const isAdmin = userId === process.env.ADMIN_ID ||
     userId === process.env.ADMIN_CHAT_ID ||
     userId === process.env.ADMIN_CHANNEL_ID;
-    
-  const canReply = msg.reply_to_message?.from?.id === botInfo.id ||
-    userId === process.env.ADMIN_CHANNEL_ID ||
-    chatType === 'channel' || chatType === 'supergroup';
+
+  const canReply = (msg.reply_to_message?.from?.id === botInfo.id ||
+    userId === process.env.ADMIN_CHANNEL_ID) &&
+    (chatType === 'channel' || chatType === 'supergroup');
 
   console.group();
   console.log('message: ', message);
