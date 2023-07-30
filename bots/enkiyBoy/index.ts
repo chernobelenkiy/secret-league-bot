@@ -16,8 +16,12 @@ bot.on('message', async (msg) => {
   console.log('userId: ', userId);
   if (!message) return;
 
-  const response = await generate(message, chatType);
-  if (!response) return;
+  if (chatType === 'channel' || chatType === 'supergroup') {
+    const response = await generate(message, userId === process.env.ADMIN_ID);
+    if (!response) return;
 
-  await bot.sendMessage(chatId, response, { reply_to_message_id: replyToMessageId });
+    await bot.sendMessage(chatId, response, { reply_to_message_id: replyToMessageId, parse_mode: 'HTML' });
+  } else {
+    bot.sendMessage(chatId, 'К сожалению, пока что 1 на 1 со мной пообщаться не получится. Мой создатель работает над этим.');
+  }
 });

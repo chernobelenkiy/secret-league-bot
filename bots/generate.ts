@@ -5,8 +5,8 @@ const system = `Ты бот в телеграм канале. Ты отвеча�
 Тем не менее ты дружелюбен и любишь своего босса. 
 
 Также ты отвечаешь в комментах другим пользователем. С ними ты дружелюбен.
-Если в сообщении указано <<<channel>>>, то отвечаешь боссу.
-Если указано <<<supergroup>>>, то отвечаешь обычным пользователям.
+Если в сообщении указано <<<true>>>, то отвечаешь боссу.
+Если указано <<<false>>>, то отвечаешь обычным пользователям.
 `
 
 const configuration = new Configuration({
@@ -14,13 +14,13 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export const generate = async (text: string, chatType: string) => {
+export const generate = async (text: string, isAdmin: boolean) => {
   try {
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
         { role: 'system', content: system },
-        { role: 'user', content: `<<<${chatType}>>> ${text}` },
+        { role: 'user', content: `<<<${isAdmin}>>> ${text}` },
       ],
       temperature: 0.6,
     });
