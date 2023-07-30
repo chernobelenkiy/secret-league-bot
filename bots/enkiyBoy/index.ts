@@ -17,12 +17,12 @@ bot.on('message', async (msg) => {
   if (!message) return;
   const botInfo = await bot.getMe();
 
+  const isChannel = userId === process.env.ADMIN_CHANNEL_ID;
   const isAdmin = userId === process.env.ADMIN_ID ||
     userId === process.env.ADMIN_CHAT_ID ||
-    userId === process.env.ADMIN_CHANNEL_ID;
+    isChannel;
 
-  const canReply = (msg.reply_to_message?.from?.id === botInfo.id ||
-    userId === process.env.ADMIN_CHANNEL_ID) &&
+  const canReply = (msg.reply_to_message?.from?.id === botInfo.id || isChannel) &&
     (chatType === 'channel' || chatType === 'supergroup');
 
   console.group();
@@ -33,7 +33,7 @@ bot.on('message', async (msg) => {
   console.groupEnd();
 
   if (canReply) {
-    const response = await generate(message, isAdmin);
+    const response = await generate(message, isAdmin, isChannel);
     if (!response) return;
     await bot.sendMessage(chatId, response, { reply_to_message_id: replyToMessageId, parse_mode: 'HTML' });
   }
