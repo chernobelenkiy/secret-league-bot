@@ -30,11 +30,13 @@ bot.on('message', async (msg) => {
   console.log('isAdmin: ', isAdmin);
   console.log('userId: ', userId);
   console.log('chatType: ', chatType);
-  console.groupEnd();
+  
 
   if (canReply) {
     const response = await generate(message, isAdmin, isChannel);
     if (!response) return;
+    console.log('response: ', response);
+    console.groupEnd();
     await bot.sendMessage(chatId, response, { reply_to_message_id: replyToMessageId, parse_mode: 'HTML' });
   }
 });
