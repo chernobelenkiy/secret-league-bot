@@ -13,11 +13,10 @@ bot.on('message', async (msg) => {
   const chatType = msg.chat.type;
   const replyToMessageId = msg.message_id;
   const userId = msg?.from?.id;
-  console.log('userId: ', userId);
   if (!message) return;
 
   if (chatType === 'channel' || chatType === 'supergroup') {
-    const response = await generate(message, userId === process.env.ADMIN_ID);
+    const response = await generate(message, userId?.toString() === process.env.ADMIN_ID);
     if (!response) return;
 
     await bot.sendMessage(chatId, response, { reply_to_message_id: replyToMessageId, parse_mode: 'HTML' });
