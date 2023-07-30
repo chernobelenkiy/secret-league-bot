@@ -13,8 +13,17 @@ bot.on('message', async (msg) => {
   const chatType = msg.chat.type;
   const replyToMessageId = msg.message_id;
   const userId = msg?.from?.id?.toString();
-  const isAdmin = userId === process.env.ADMIN_ID || userId === process.env.ADMIN_CHAT_ID;
+  
   if (!message) return;
+  const botInfo = await bot.getMe();
+
+  const isAdmin = userId === process.env.ADMIN_ID ||
+    userId === process.env.ADMIN_CHAT_ID ||
+    userId === process.env.ADMIN_CHANNEL_ID;
+    
+  const canReply = msg.reply_to_message?.from?.id === botInfo.id ||
+    userId === process.env.ADMIN_CHANNEL_ID ||
+    chatType === 'channel' || chatType === 'supergroup';
 
   console.group();
   console.log('message: ', message);
@@ -23,10 +32,9 @@ bot.on('message', async (msg) => {
   console.log('chatType: ', chatType);
   console.groupEnd();
 
-  if (chatType === 'channel' || chatType === 'supergroup') {
+  if (canReply) {
     const response = await generate(message, isAdmin);
     if (!response) return;
-
     await bot.sendMessage(chatId, response, { reply_to_message_id: replyToMessageId, parse_mode: 'HTML' });
   } else {
     bot.sendMessage(chatId, 'К сожалению, пока что 1 на 1 со мной пообщаться не получится. Мой создатель работает над этим.');
