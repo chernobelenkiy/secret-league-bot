@@ -15,7 +15,7 @@ bot.on('message', async (msg) => {
   console.log('message: ', message);
 
   // Call OpenAI API to generate a response
-  const response = await generate(message, 'админ');
+  const response = await generate(message);
   if (!response) return;
   console.log('response: ', response);
 
