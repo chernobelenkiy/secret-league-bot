@@ -36,7 +36,5 @@ bot.on('message', async (msg) => {
     const response = await generate(message, isAdmin);
     if (!response) return;
     await bot.sendMessage(chatId, response, { reply_to_message_id: replyToMessageId, parse_mode: 'HTML' });
-  } else {
-    bot.sendMessage(chatId, 'К сожалению, пока что 1 на 1 со мной пообщаться не получится. Мой создатель работает над этим.');
   }
 });
