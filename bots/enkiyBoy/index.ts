@@ -12,9 +12,12 @@ bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
   if (!message) return;
 
+  console.log('message: ', message);
+
   // Call OpenAI API to generate a response
   const response = await generate(message, 'админ');
   if (!response) return;
+  console.log('response: ', response);
 
   // Post the response as a comment to the message
   await bot.sendMessage(chatId, response);
