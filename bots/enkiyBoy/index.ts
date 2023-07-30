@@ -15,6 +15,8 @@ bot.on('message', async (msg) => {
   const userId = msg?.from?.id?.toString();
   const isAdmin = userId === process.env.ADMIN_ID || userId === process.env.ADMIN_CHAT_ID;
   if (!message) return;
+  console.log('message: ', message);
+  console.log('isAdmin: ', isAdmin);
 
   if (chatType === 'channel' || chatType === 'supergroup') {
     const response = await generate(message, isAdmin);
