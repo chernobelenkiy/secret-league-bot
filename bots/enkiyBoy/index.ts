@@ -20,17 +20,17 @@ bot.on('message', async (msg) => {
   await bot.sendMessage(chatId, response);
 
   // Listen for replies to the comment
-  bot.on('message', async (msg) => {
-    const reply = msg.text;
-    if (!reply) return;
+  // bot.on('message', async (msg) => {
+  //   const reply = msg.text;
+  //   if (!reply) return;
 
-    // Call OpenAI API to generate a response to the reply
-    const response = await generate(reply, 'пользователь');
-    if (!response) return;
+  //   // Call OpenAI API to generate a response to the reply
+  //   const response = await generate(reply, 'пользователь');
+  //   if (!response) return;
 
-    // Post the response as a comment to the reply
-    await bot.sendMessage(chatId, response, {
-      reply_to_message_id: msg.message_id,
-    });
-  });
+  //   // Post the response as a comment to the reply
+  //   await bot.sendMessage(chatId, response, {
+  //     reply_to_message_id: msg.message_id,
+  //   });
+  // });
 });
