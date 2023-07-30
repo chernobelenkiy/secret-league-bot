@@ -19,20 +19,19 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export const generate = async (text: string, isAdmin: boolean, isChannel: boolean) => {
+export const generate = async (text: string, tags: string[]) => {
   try {
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
         { role: 'system', content: system },
         { role: 'user', content: `
-          технические метки: {{${isAdmin ? 'admin' : 'user'}}}
-          ${isChannel ? '{{channel}}' : ''}
+          технические метки: ${tags.map(tag => `{{${tag}}}`).join(' ')}
           """
           ${text}
         `},
       ],
-      temperature: 0.4,
+      temperature: 0.6,
     });
     return completion.data.choices[0].message?.content;
   } catch(error) {

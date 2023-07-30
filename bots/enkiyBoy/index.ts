@@ -7,6 +7,15 @@ if (!process.env.ENKIY) {
 
 const bot = new TelegramBot(process.env.ENKIY, { polling: true });
 
+const createTechincalTags = (isAdmin: boolean, isChannel: boolean) => {
+  const tags: string[] = [];
+  tags.push(isAdmin ? 'admin' : 'user');
+  if (isChannel) {
+    tags.push('channel');
+  }
+  return tags;
+}
+
 bot.on('message', async (msg) => {
   const message = msg.text;
   const chatId = msg.chat.id;
@@ -33,7 +42,7 @@ bot.on('message', async (msg) => {
   
 
   if (canReply) {
-    const response = await generate(message, isAdmin, isChannel);
+    const response = await generate(message, createTechincalTags(isAdmin, isChannel));
     if (!response) return;
     console.log('response: ', response);
     console.groupEnd();
