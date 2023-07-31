@@ -27,9 +27,10 @@ bot.on('message', async (msg) => {
   const botInfo = await bot.getMe();
 
   const isAdminUser = userId === process.env.ADMIN_ID;
+  const isAdminChannelUserId = userId === process.env.ADMIN_CHANNEL_USER_ID;
   const isAdminChat = userId === process.env.ADMIN_CHAT_ID;
   const isChannel = userId === process.env.ADMIN_CHANNEL_ID;
-  const isAdmin = isAdminUser || isAdminChat || isChannel;
+  const isAdmin = isAdminUser || isAdminChat || isChannel || isAdminChannelUserId;
 
   const canReply = isAdminUser ||
     ((msg.reply_to_message?.from?.id === botInfo.id || isChannel) &&
