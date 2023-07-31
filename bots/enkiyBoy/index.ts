@@ -26,13 +26,14 @@ bot.on('message', async (msg) => {
   if (!message) return;
   const botInfo = await bot.getMe();
 
+  const isAdminUser = userId === process.env.ADMIN_ID;
+  const isAdminChat = userId === process.env.ADMIN_CHAT_ID;
   const isChannel = userId === process.env.ADMIN_CHANNEL_ID;
-  const isAdmin = userId === process.env.ADMIN_ID ||
-    userId === process.env.ADMIN_CHAT_ID ||
-    isChannel;
+  const isAdmin = isAdminUser || isAdminChat || isChannel;
 
-  const canReply = (msg.reply_to_message?.from?.id === botInfo.id || isChannel) &&
-    (chatType === 'channel' || chatType === 'supergroup');
+  const canReply = isAdminUser ||
+    ((msg.reply_to_message?.from?.id === botInfo.id || isChannel) &&
+    (chatType === 'channel' || chatType === 'supergroup'));
 
   console.group();
   console.log('message: ', message);
