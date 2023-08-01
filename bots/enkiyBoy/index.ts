@@ -6,6 +6,7 @@ if (!process.env.ENKIY) {
 }
 
 const bot = new TelegramBot(process.env.ENKIY, { polling: true });
+const WHITE_LIST_IDS = process.env.WHITE_LIST_IDS?.split(',') || [];
 
 const createTechincalTags = (isAdmin: boolean, isChannel: boolean) => {
   const tags: string[] = [];
@@ -35,6 +36,9 @@ bot.on('message', async (msg) => {
     ((msg.reply_to_message?.from?.id === botInfo.id || isChannel) &&
     (chatType === 'channel' || chatType === 'supergroup'));
 
+  const canReplyToUser = (chatType === 'private') && userId && 
+    (isAdminUser || WHITE_LIST_IDS.includes(userId));
+
   console.group();
   console.log('message: ', message);
   console.log('isAdmin: ', isAdmin);
@@ -42,7 +46,7 @@ bot.on('message', async (msg) => {
   console.log('chatType: ', chatType);
   
 
-  if (canReply) {
+  if (canReply || canReplyToUser) {
     const response = await generate(message, createTechincalTags(isAdmin, isChannel));
     if (!response) return;
     console.log('response: ', response);
