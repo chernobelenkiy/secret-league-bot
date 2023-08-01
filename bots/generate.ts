@@ -25,7 +25,7 @@ export const generate = async (text: string, tags: string[]) => {
         { role: 'system', content: system },
         { role: 'user', content: `${tags.map(tag => `{{${tag}}}`).join(' ')}""" ${text}` },
       ],
-      temperature: 0.6,
+      temperature: 0.3,
     });
     return completion.data.choices[0].message?.content;
   } catch(error) {
