@@ -9,9 +9,9 @@ const bot = new TelegramBot(process.env.ENKIY, { polling: true });
 
 const createTechincalTags = (isAdmin: boolean, isChannel: boolean) => {
   const tags: string[] = [];
-  tags.push(isAdmin ? 'admin' : 'user');
+  tags.push(isAdmin ? 'Сообщение пришло от админа' : 'Сообщение пришло от пользователя');
   if (isChannel) {
-    tags.push('channel');
+    tags.push('с канала');
   }
   return tags;
 }
@@ -27,9 +27,8 @@ bot.on('message', async (msg) => {
   const botInfo = await bot.getMe();
 
   const isAdminUser = userId === process.env.ADMIN_ID;
-  const isAdminChannelUserId = userId === process.env.ADMIN_CHANNEL_USER_ID;
   const isAdminChat = userId === process.env.ADMIN_CHAT_ID;
-  const isChannel = userId === process.env.ADMIN_CHANNEL_ID ||  isAdminChannelUserId;
+  const isChannel = userId === process.env.ADMIN_CHANNEL_USER_ID;
   const isAdmin = isAdminUser || isAdminChat || isChannel;
 
   const canReply = isAdminUser ||
