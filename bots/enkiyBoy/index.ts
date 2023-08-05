@@ -5,16 +5,48 @@ if (!process.env.ENKIY) {
   throw new Error('Telegram API key is needed');
 }
 
+type TUserAccess = {
+  adminUser: boolean;
+  whiteListUser: boolean;
+  adminChat: boolean;
+  channel: boolean;
+  admin: boolean;
+  canReply: boolean;
+  canReplyToUser: boolean;
+}
+
 const bot = new TelegramBot(process.env.ENKIY, { polling: true });
 const WHITE_LIST_IDS = process.env.WHITE_LIST_IDS?.split(',') || [];
 
-const createTechincalTags = (isAdmin: boolean, isChannel: boolean) => {
+const createTechincalTags = (userAccess: TUserAccess) => {
   const tags: string[] = [];
-  tags.push(isAdmin ? 'Сообщение пришло от админа' : 'Сообщение пришло от пользователя');
-  if (isChannel) {
+  tags.push(userAccess.admin ? 'Сообщение пришло от админа' : 'Сообщение пришло от пользователя');
+  if (userAccess.channel) {
     tags.push('с канала');
   }
   return tags;
+}
+
+const createUserAccess = (userId: string | undefined, botId: string, fromId: string | undefined, chatType: string): TUserAccess => {
+  const adminUser = userId === process.env.ADMIN_ID;
+  const whiteListUser = !!userId && WHITE_LIST_IDS.includes(userId);
+  const adminChat = userId === process.env.ADMIN_CHAT_ID;
+  const channel = userId === process.env.ADMIN_CHANNEL_USER_ID;
+  const admin = adminUser || adminChat || channel;
+  const canReply = adminUser ||
+    ((fromId === botId || channel) &&
+    (chatType === 'channel' || chatType === 'supergroup'));
+  const canReplyToUser = (chatType === 'private') && !!userId && (adminUser || whiteListUser);
+
+  return {
+    adminUser,
+    whiteListUser,
+    adminChat,
+    channel,
+    admin,
+    canReply,
+    canReplyToUser
+  }
 }
 
 bot.on('message', async (msg) => {
@@ -27,27 +59,16 @@ bot.on('message', async (msg) => {
   if (!message) return;
   const botInfo = await bot.getMe();
 
-  const isAdminUser = userId === process.env.ADMIN_ID;
-  const isAdminChat = userId === process.env.ADMIN_CHAT_ID;
-  const isChannel = userId === process.env.ADMIN_CHANNEL_USER_ID;
-  const isAdmin = isAdminUser || isAdminChat || isChannel;
-
-  const canReply = isAdminUser ||
-    ((msg.reply_to_message?.from?.id === botInfo.id || isChannel) &&
-    (chatType === 'channel' || chatType === 'supergroup'));
-
-  const canReplyToUser = (chatType === 'private') && userId && 
-    (isAdminUser || WHITE_LIST_IDS.includes(userId));
+  const userAccess = createUserAccess(userId, botInfo.id?.toString(), msg?.from?.id?.toString(), chatType);
 
   console.group();
   console.log('message: ', message);
-  console.log('isAdmin: ', isAdmin);
+  console.log('userAccess: ', userAccess);
   console.log('userId: ', userId);
   console.log('chatType: ', chatType);
   
-
-  if (canReply || canReplyToUser) {
-    const response = await generate(message, createTechincalTags(isAdmin, isChannel));
+  if (userAccess.canReply || userAccess.canReplyToUser) {
+    const response = await generate(message, createTechincalTags(userAccess));
     if (!response) return;
     console.log('response: ', response);
     console.groupEnd();
