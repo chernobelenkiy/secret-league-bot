@@ -28,19 +28,21 @@ const createTechincalTags = (userAccess: TUserAccess) => {
 }
 
 const createUserAccess = (
-  userId: string | undefined,
-  botId: string,
-  fromId: string | undefined,
-  chatType: string,
+  msg: TelegramBot.Message,
+  botInfo: TelegramBot.User,
   hashTags: { [key: string]: boolean }
 ): TUserAccess => {
+  const chatType = msg.chat.type;
+  const userId = msg?.from?.id?.toString();
   const adminUser = userId === process.env.ADMIN_ID;
   const whiteListUser = !!userId && WHITE_LIST_IDS.includes(userId);
   const adminChat = userId === process.env.ADMIN_CHAT_ID;
   const channel = userId === process.env.ADMIN_CHANNEL_USER_ID;
   const admin = adminUser || adminChat || channel;
+  const fromId = msg.reply_to_message?.from?.id;
+
   const canReply = adminUser ||
-    ((fromId === botId || channel) &&
+    ((fromId === botInfo.id || channel) &&
     (chatType === 'channel' || chatType === 'supergroup'));
   const canReplyToUser = (chatType === 'private') && !!userId && (adminUser || whiteListUser);
 
@@ -74,21 +76,16 @@ const extractHashtags = (msg: string) => {
 }
 
 bot.on('message', async (msg) => {
-  const message = msg.text;
-  const chatId = msg.chat.id;
-  const chatType = msg.chat.type;
-  const replyToMessageId = msg.message_id;
-  const userId = msg?.from?.id?.toString();
-  if (!message) return;
+  if (!msg.text) return;
   const botInfo = await bot.getMe();
-  const { hashTags, parsedMessage } = extractHashtags(message);
-  const userAccess = createUserAccess(userId, botInfo.id?.toString(), msg.reply_to_message?.from?.id?.toString(), chatType, hashTags);
+  const { hashTags, parsedMessage } = extractHashtags(msg.text);
+  const userAccess = createUserAccess(msg, botInfo, hashTags);
   
   console.group();
-  console.log('message: ', message);
+  console.log('message: ', msg.text);
   console.log('userAccess: ', userAccess);
-  console.log('userId: ', userId);
-  console.log('chatType: ', chatType);
+  console.log('userId: ', msg.from?.id);
+  console.log('chatType: ', msg.chat.type);
   console.log('hashTags: ', hashTags);
   
   if (userAccess.canReply || userAccess.canReplyToUser) {
@@ -96,6 +93,6 @@ bot.on('message', async (msg) => {
     if (!response) return;
     console.log('response: ', response);
     console.groupEnd();
-    await bot.sendMessage(chatId, response, { reply_to_message_id: replyToMessageId, parse_mode: 'HTML' });
+    await bot.sendMessage(msg.chat.id, response, { reply_to_message_id: msg.message_id, parse_mode: 'HTML' });
   }
 });
