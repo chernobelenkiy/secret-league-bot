@@ -82,7 +82,7 @@ bot.on('message', async (msg) => {
   if (!message) return;
   const botInfo = await bot.getMe();
   const { hashTags, parsedMessage } = extractHashtags(message);
-  const userAccess = createUserAccess(userId, botInfo.id?.toString(), msg?.from?.id?.toString(), chatType, hashTags);
+  const userAccess = createUserAccess(userId, botInfo.id?.toString(), msg.reply_to_message?.from?.id?.toString(), chatType, hashTags);
   
   console.group();
   console.log('message: ', message);
