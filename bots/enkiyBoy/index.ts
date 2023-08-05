@@ -27,7 +27,13 @@ const createTechincalTags = (userAccess: TUserAccess) => {
   return tags;
 }
 
-const createUserAccess = (userId: string | undefined, botId: string, fromId: string | undefined, chatType: string): TUserAccess => {
+const createUserAccess = (
+  userId: string | undefined,
+  botId: string,
+  fromId: string | undefined,
+  chatType: string,
+  hashTags: { [key: string]: boolean }
+): TUserAccess => {
   const adminUser = userId === process.env.ADMIN_ID;
   const whiteListUser = !!userId && WHITE_LIST_IDS.includes(userId);
   const adminChat = userId === process.env.ADMIN_CHAT_ID;
@@ -44,8 +50,8 @@ const createUserAccess = (userId: string | undefined, botId: string, fromId: str
     adminChat,
     channel,
     admin,
-    canReply,
-    canReplyToUser
+    canReply: !hashTags.nobot && canReply,
+    canReplyToUser,
   }
 }
 
@@ -75,9 +81,9 @@ bot.on('message', async (msg) => {
   const userId = msg?.from?.id?.toString();
   if (!message) return;
   const botInfo = await bot.getMe();
-  const userAccess = createUserAccess(userId, botInfo.id?.toString(), msg?.from?.id?.toString(), chatType);
   const { hashTags, parsedMessage } = extractHashtags(message);
-
+  const userAccess = createUserAccess(userId, botInfo.id?.toString(), msg?.from?.id?.toString(), chatType, hashTags);
+  
   console.group();
   console.log('message: ', message);
   console.log('userAccess: ', userAccess);
