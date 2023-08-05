@@ -49,26 +49,44 @@ const createUserAccess = (userId: string | undefined, botId: string, fromId: str
   }
 }
 
+const extractHashtags = (msg: string) => {
+  const hashtagRegex = /#\w+/g;
+  const hashMatches = msg.match(hashtagRegex);
+  const hashTags = {} as { [key: string]: boolean };
+  const msgWithoutHashtags = msg.replace(hashtagRegex, "");
+
+  if (hashMatches) {
+    hashMatches.forEach((hashtag) => {
+      hashTags[hashtag] = true;
+    });
+  }
+
+  return {
+    hashTags,
+    parsedMessage: msgWithoutHashtags
+  };
+}
+
 bot.on('message', async (msg) => {
   const message = msg.text;
   const chatId = msg.chat.id;
   const chatType = msg.chat.type;
   const replyToMessageId = msg.message_id;
   const userId = msg?.from?.id?.toString();
-  
   if (!message) return;
   const botInfo = await bot.getMe();
-
   const userAccess = createUserAccess(userId, botInfo.id?.toString(), msg?.from?.id?.toString(), chatType);
+  const { hashTags, parsedMessage } = extractHashtags(message);
 
   console.group();
   console.log('message: ', message);
   console.log('userAccess: ', userAccess);
   console.log('userId: ', userId);
   console.log('chatType: ', chatType);
+  console.log('hashTags: ', hashTags);
   
   if (userAccess.canReply || userAccess.canReplyToUser) {
-    const response = await generate(message, createTechincalTags(userAccess));
+    const response = await generate(parsedMessage, createTechincalTags(userAccess));
     if (!response) return;
     console.log('response: ', response);
     console.groupEnd();
