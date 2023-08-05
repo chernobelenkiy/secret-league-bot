@@ -57,7 +57,7 @@ const extractHashtags = (msg: string) => {
 
   if (hashMatches) {
     hashMatches.forEach((hashtag) => {
-      hashTags[hashtag] = true;
+      hashTags[hashtag.replace('#', '')] = true;
     });
   }
 
