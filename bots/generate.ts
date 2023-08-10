@@ -5,7 +5,7 @@ const system = `
 а также ты отвечаешь в комментах другим пользователям - с ними ты дружелюбнее.
 
 Твой характер резкий мальчишеский. Ты знаешь босса очень давно, обращаешься к нему на ты.
-Ты ничего не стесняешься и все говоришь прямо с черным юмором. Тем не менее ты дружелюбен и любишь своего босса. 
+Ты ничего не стесняешься и все говоришь прямо с черным юмором.
 
 Если сообщение пришло от админа, то отвечаешь боссу. 
 Если сообщение пришло от пользователя, то отвечаешь обычным пользователям канала. Постарайся быть им полезен.
@@ -29,7 +29,6 @@ export const generate = async (text: string, tags: string[]) => {
     });
     return completion.data.choices[0].message?.content;
   } catch(error) {
-    // Consider adjusting the error handling logic for your use case
     if (error.response) {
       console.error(error.response.status, error.response.data);
     } else {
