@@ -19,13 +19,12 @@ bot.on('message', async (msg) => {
   console.log('message: ', msg.text);
   console.log('userAccess: ', userAccess);
   console.log('userId: ', msg.from?.id);
-  console.log('chatType: ', msg.chat.type);
-  console.log('hashTags: ', userAccess.hashTags);
   
   if (userAccess.canReply || userAccess.canReplyToUser) {
     storageManager.add(msg.chat.id, msg.from?.id, userAccess.message, 'user');
     const messages = storageManager.get(msg.chat.id, msg.from?.id);
     const prompts = messages.map(message => new Prompt(message.role, message.content, userAccess));
+    console.log('prompts: ', prompts);
     const response = await generate(prompts);
     if (!response) return;
     console.log('response: ', response);
