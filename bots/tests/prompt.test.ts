@@ -1,4 +1,5 @@
-import { Prompt } from '../prompt';
+import { PromptManager } from '../prompt';
+import { TMessage } from '../types';
 import { TUserAccess } from '../enkiyBoy/userAccess';
 
 describe('Prompt', () => {
@@ -23,23 +24,28 @@ describe('Prompt', () => {
     it('should create a prompt with the correct content for a user', () => {
       userAccess.admin = false;
       userAccess.channel = true;
-      
-      const prompt = new Prompt('user', 'Hello, world!', userAccess);
-      expect(prompt.get().content).toEqual('{{Сообщение пришло от пользователя}} {{с канала}}""" Hello, world!');
+      const messages: TMessage[] = [ { role: 'user', content: 'hello world' } ];
+      const prompts = new PromptManager(userAccess, messages).getPrompts();
+
+      expect(prompts[0].content).toEqual('Ты бот в телеграм канале. Твой характер резкий мальчишеский. Ты ничего не стесняешься и все говоришь прямо с черным юмором. Ты отвечаешь обычному пользователю канала. Постарайся быть ему полезен. Ты отвечаешь на сообщение из канала.')
     });
 
     it('should create a prompt with the correct content for an admin', () => {
       userAccess.admin = true;
       userAccess.channel = true;
-      const prompt = new Prompt('assistant', 'Hello, admin!', userAccess);
-      expect(prompt.get().content).toEqual('{{Сообщение пришло от админа}} {{с канала}}""" Hello, admin!');
+      const messages: TMessage[] = [ { role: 'user', content: 'hello world' } ];
+      const prompts = new PromptManager(userAccess, messages).getPrompts();
+
+      expect(prompts[0].content).toEqual('Ты бот в телеграм канале. Твой характер резкий мальчишеский. Ты ничего не стесняешься и все говоришь прямо с черным юмором. Ты отвечаешь на посты своего босса, он же админ канала. Ты знаешь босса очень давно, обращаешься к нему на ты. Ты отвечаешь на сообщение из канала.');
     });
 
     it('should create a prompt with the correct content for a user without a channel', () => {
       userAccess.admin = false;
       userAccess.channel = false;
-      const prompt = new Prompt('user', 'Hello, world!', userAccess);
-      expect(prompt.get().content).toEqual('{{Сообщение пришло от пользователя}}""" Hello, world!');
+      const messages: TMessage[] = [ { role: 'user', content: 'hello world' } ];
+      const prompts = new PromptManager(userAccess, messages).getPrompts();
+
+      expect(prompts[0].content).toEqual('Ты бот в телеграм канале. Твой характер резкий мальчишеский. Ты ничего не стесняешься и все говоришь прямо с черным юмором. Ты отвечаешь обычному пользователю канала. Постарайся быть ему полезен. Ты отвечаешь на сообщение из личных сообщений.');
     });
   });
 });

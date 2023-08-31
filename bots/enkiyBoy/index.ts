@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { generate } from '../generate';
-import { Prompt } from '../prompt';
+import { PromptManager } from '../prompt';
 import { createUserAccess } from './userAccess';
 import { storageManager } from './storage';
 
@@ -23,7 +23,7 @@ bot.on('message', async (msg) => {
   if (userAccess.canReply || userAccess.canReplyToUser) {
     storageManager.add(msg.chat.id, msg.from?.id, userAccess.message, 'user');
     const messages = storageManager.get(msg.chat.id, msg.from?.id);
-    const prompts = messages.map(message => new Prompt(message.role, message.content, userAccess));
+    const prompts = new PromptManager(userAccess, messages).getPrompts();
     console.log('prompts: ', prompts);
     const response = await generate(prompts);
     if (!response) return;

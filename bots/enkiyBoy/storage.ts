@@ -1,11 +1,7 @@
+import { TRole, TMessage } from '../types';
+
 const LIMIT = 40;
 
-export type TMessage = {
-  role: 'assistant' | 'user';
-  content: string;
-}
-
-export type TRole = 'assistant' | 'user';
 
 class Messages {
   private queue: TMessage[] = [];

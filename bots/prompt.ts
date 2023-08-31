@@ -1,28 +1,39 @@
 import { TUserAccess } from './enkiyBoy/userAccess';
+import { TMessage } from './types';
 
-const createTechincalTags = (userAccess: TUserAccess) => {
-  const tags: string[] = [];
-  tags.push(userAccess.admin ? 'Сообщение пришло от админа' : 'Сообщение пришло от пользователя');
-  if (userAccess.channel) {
-    tags.push('с канала');
-  }
-  return tags;
-}
+const systemPrompt = 'Ты бот в телеграм канале. Твой характер резкий мальчишеский. Ты ничего не стесняешься и все говоришь прямо с черным юмором.'
 
-export class Prompt {
-  private content: string;
-  private role: 'user' | 'assistant';
+export class PromptManager {
+  private userAccess: TUserAccess;
+  private prompts: TMessage[] = [];
 
-  constructor(role: 'user' | 'assistant', text: string, userAccess: TUserAccess) {
-    const tags = createTechincalTags(userAccess);
-    this.role = role;
-    this.content = `${tags.map(tag => `{{${tag}}}`).join(' ')}""" ${text}`;
+  constructor(userAccess: TUserAccess, messages: TMessage[]) {
+    this.userAccess = userAccess;
+    this.prompts = [
+      { role: 'system', content: this.createSystemPrompt() },
+      ...messages
+    ];
   }
 
-  public get() {
-    return {
-      role: this.role,
-      content: this.content,
+  createSystemPrompt() {
+    let prompt = systemPrompt;
+
+    if (this.userAccess.admin) {
+      prompt += ' Ты отвечаешь на посты своего босса, он же админ канала. Ты знаешь босса очень давно, обращаешься к нему на ты.';
+    } else {
+      prompt += ' Ты отвечаешь обычному пользователю канала. Постарайся быть ему полезен.'
     }
+
+    if (this.userAccess.channel) {
+      prompt += ' Ты отвечаешь на сообщение из канала.'
+    } else {
+      prompt += ' Ты отвечаешь на сообщение из личных сообщений.'
+    }
+
+    return prompt;
+  }
+
+  getPrompts(): TMessage[] {
+    return this.prompts;
   }
 }
