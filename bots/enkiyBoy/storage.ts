@@ -29,11 +29,11 @@ export class StorageManager {
     this.storage = new Map<string, Messages>();
   }
 
-  private key(chatId: number, userId: number) {
-    return `${chatId}_${userId}`;
+  private key(chatId: number, userId?: number) {
+    return userId ? `${chatId}_${userId}` : chatId.toString();
   }
 
-  public add(chatId: number, userId: number, content: string, role: TRole) {
+  public add(chatId: number, userId: number | undefined, content: string, role: TRole) {
     const key = this.key(chatId, userId);
     const storage = this.storage.get(key) || new Messages();
 
@@ -41,10 +41,12 @@ export class StorageManager {
     this.storage.set(key, storage);
   } 
 
-  public get(chatId: number, userId: number): TMessage[] {
+  public get(chatId: number, userId?: number): TMessage[] {
     const key = this.key(chatId, userId);
     const storage = this.storage.get(key) || new Messages();
 
     return storage.getMessages();
   }
 }
+
+export const storageManager = new StorageManager();

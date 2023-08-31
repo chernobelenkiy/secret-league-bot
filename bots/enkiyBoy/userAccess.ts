@@ -4,6 +4,8 @@ if (!process.env.ENKIY) {
   throw new Error('Telegram API key is needed');
 }
 
+const WHITE_LIST_IDS = process.env.WHITE_LIST_IDS?.split(',') || [];
+
 export type TUserAccess = {
   adminUser: boolean;
   whiteListUser: boolean;
@@ -12,24 +14,33 @@ export type TUserAccess = {
   admin: boolean;
   canReply: boolean;
   canReplyToUser: boolean;
+  message: string;
+  hashTags: { [key: string]: boolean; }
 }
 
-const WHITE_LIST_IDS = process.env.WHITE_LIST_IDS?.split(',') || [];
+export const extractHashtags = (msg: string) => {
+  const hashtagRegex = /#\w+/g;
+  const hashMatches = msg.match(hashtagRegex);
+  const hashTags = {} as { [key: string]: boolean };
+  const msgWithoutHashtags = msg.replace(hashtagRegex, "");
 
-export const createTechincalTags = (userAccess: TUserAccess) => {
-  const tags: string[] = [];
-  tags.push(userAccess.admin ? 'Сообщение пришло от админа' : 'Сообщение пришло от пользователя');
-  if (userAccess.channel) {
-    tags.push('с канала');
+  if (hashMatches) {
+    hashMatches.forEach((hashtag) => {
+      hashTags[hashtag.replace('#', '')] = true;
+    });
   }
-  return tags;
+
+  return {
+    hashTags,
+    parsedMessage: msgWithoutHashtags
+  };
 }
 
 export const createUserAccess = (
   msg: TelegramBot.Message,
   botInfo: TelegramBot.User,
-  hashTags: { [key: string]: boolean }
 ): TUserAccess => {
+  const { hashTags, parsedMessage } = extractHashtags(msg?.text || '');
   const chatType = msg.chat.type;
   const userId = msg?.from?.id?.toString();
   const adminUser = userId === process.env.ADMIN_ID;
@@ -52,23 +63,8 @@ export const createUserAccess = (
     admin,
     canReply: !hashTags.nobot && canReply,
     canReplyToUser,
-  }
-}
 
-export const extractHashtags = (msg: string) => {
-  const hashtagRegex = /#\w+/g;
-  const hashMatches = msg.match(hashtagRegex);
-  const hashTags = {} as { [key: string]: boolean };
-  const msgWithoutHashtags = msg.replace(hashtagRegex, "");
-
-  if (hashMatches) {
-    hashMatches.forEach((hashtag) => {
-      hashTags[hashtag.replace('#', '')] = true;
-    });
-  }
-
-  return {
     hashTags,
-    parsedMessage: msgWithoutHashtags
-  };
+    message: parsedMessage,
+  }
 }
