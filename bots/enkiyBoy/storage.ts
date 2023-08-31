@@ -1,14 +1,23 @@
-class Messages {
-  private queue: string[] = [];
+const LIMIT = 40;
 
-  public add(str: string) {
-    this.queue.push(str);
-    if (this.queue.length > 20) {
+export type TMessage = {
+  role: 'assistant' | 'user';
+  content: string;
+}
+
+export type TRole = 'assistant' | 'user';
+
+class Messages {
+  private queue: TMessage[] = [];
+
+  public add(content: string, role: TRole) {
+    this.queue.push({ content, role });
+    if (this.queue.length > LIMIT) {
       this.queue.shift();
     }
   }
 
-  public getMessages(): string[] {
+  public getMessages(): TMessage[] {
     return this.queue;
   }
 }
@@ -24,15 +33,15 @@ export class StorageManager {
     return `${chatId}_${userId}`;
   }
 
-  public add(chatId: number, userId: number, text: string) {
+  public add(chatId: number, userId: number, content: string, role: TRole) {
     const key = this.key(chatId, userId);
     const storage = this.storage.get(key) || new Messages();
 
-    storage.add(text)
+    storage.add(content, role);
     this.storage.set(key, storage);
   } 
 
-  public get(chatId: number, userId: number): string[] {
+  public get(chatId: number, userId: number): TMessage[] {
     const key = this.key(chatId, userId);
     const storage = this.storage.get(key) || new Messages();
 
