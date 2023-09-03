@@ -5,3 +5,7 @@ export type TMessage = {
   role: TRole;
   content: string;
 }
+
+export interface ISystemPrompt {
+  generatePrompt(): string;
+}

@@ -4,11 +4,11 @@ import { storageManager } from '../storage';
 import { createUserAccess } from './userAccess';
 import { SystemPrompt } from './systemPrompt';
 
-if (!process.env.ENKIY) {
+if (!process.env.PSYCHO) {
   throw new Error('Telegram API key is needed');
 }
 
-const bot = new TelegramBot(process.env.ENKIY, { polling: true });
+const bot = new TelegramBot(process.env.PSYCHO, { polling: true });
 
 bot.on('message', async (msg) => {
   if (!msg.text) return;
@@ -20,7 +20,7 @@ bot.on('message', async (msg) => {
   console.log('userAccess: ', userAccess);
   console.log('userId: ', msg.from?.id);
   
-  if (userAccess.canReply || userAccess.canReplyToUser) {
+  if (userAccess.canReply) {
     storageManager.add(msg.chat.id, msg.from?.id, userAccess.message, 'user');
     const messages = storageManager.get(msg.chat.id, msg.from?.id);
     const systemPrompt = new SystemPrompt(userAccess);

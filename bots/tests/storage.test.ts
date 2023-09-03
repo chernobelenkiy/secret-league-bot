@@ -1,5 +1,5 @@
 import { StorageManager } from '../storage';
-import { TMessage, TRole } from '../../types';
+import { TMessage } from '../types';
 
 describe('StorageManager', () => {
   let storage: StorageManager;

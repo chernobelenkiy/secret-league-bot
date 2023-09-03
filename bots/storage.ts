@@ -1,7 +1,6 @@
-import { TRole, TMessage } from '../types';
+import { TRole, TMessage } from './types';
 
 const LIMIT = 40;
-
 
 class Messages {
   private queue: TMessage[] = [];
