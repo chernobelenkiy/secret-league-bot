@@ -14,3 +14,8 @@ export type TChatSettings = {
   chatId: number;
   fromId: number | undefined;
 }
+
+export enum EPayloads {
+  prompt = 'prompt',
+  reset = 'reset'
+}

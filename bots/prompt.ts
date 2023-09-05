@@ -2,6 +2,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import { Configuration, OpenAIApi } from 'openai';
 import { MessageStorageManager } from './storage';
 import { removeHashtags } from './hashTags';
+import { createChatSettings } from './chatSettings';
 import { TMessage, ISystemPrompt, TRole, TChatSettings } from './types';
 
 const configuration = new Configuration({
@@ -17,20 +18,20 @@ export class PromptManager {
   private chatSettings: TChatSettings;
 
   constructor(systemPrompt: ISystemPrompt, msg: TelegramBot.Message) {
-    this.saveMessage(msg.chat.id, msg.from?.id, msg.text, 'user');
-    this.chatSettings = { chatId: msg.chat.id, fromId: msg.from?.id };
+    this.chatSettings = createChatSettings(msg);
+    this.saveMessage(msg.text, 'user');
     this.prompts = [
       { role: 'system', content: systemPrompt.generatePrompt() },
       ...this.fetchMessages()
     ];
   }
 
-  saveMessage(chatId: number, fromId: number | undefined, text: string, role: TRole = 'user') {
-    this.storage.add(chatId, fromId, removeHashtags(text), role);
+  saveMessage(text: string, role: TRole = 'user') {
+    this.storage.add(this.chatSettings, removeHashtags(text), role);
   }
 
   fetchMessages() {
-    return this.storage.get(this.chatSettings.chatId, this.chatSettings.fromId);
+    return this.storage.get(this.chatSettings);
   }
 
   generate = async () => {
@@ -44,7 +45,7 @@ export class PromptManager {
       if (!response) return; 
 
       console.log('response: ', response);
-      this.saveMessage(this.chatSettings.chatId, this.chatSettings.fromId, response, 'assistant');
+      this.saveMessage(response, 'assistant');
       return response;
     } catch(error) {
       if (error.response) {

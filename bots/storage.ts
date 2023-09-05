@@ -1,3 +1,4 @@
+import { TChatSettings } from './types';
 import { TRole, TMessage } from './types';
 
 const LIMIT = 40;
@@ -24,50 +25,50 @@ export class MessageStorageManager {
     this.storage = new Map<string, Messages>();
   }
 
-  private key(chatId: number, userId?: number) {
-    return userId ? `${chatId}_${userId}` : chatId.toString();
+  private key({ fromId, chatId }: TChatSettings) {
+    return fromId ? `${chatId}_${fromId}` : chatId.toString();
   }
 
-  public add(chatId: number, userId: number | undefined, content: string, role: TRole) {
-    const key = this.key(chatId, userId);
+  public add(settings: TChatSettings, content: string, role: TRole) {
+    const key = this.key(settings);
     const messages = this.storage.get(key) || new Messages();
 
     messages.add(content, role);
     this.storage.set(key, messages);
   } 
 
-  public get(chatId: number, userId?: number): TMessage[] {
-    const key = this.key(chatId, userId);
+  public get(settings: TChatSettings): TMessage[] {
+    const key = this.key(settings);
     const storage = this.storage.get(key) || new Messages();
 
     return storage.getMessages();
   }
 
-  public reset(chatId: number, userId?: number): void {
-    const key = this.key(chatId, userId);
+  public reset(settings: TChatSettings): void {
+    const key = this.key(settings);
     this.storage.delete(key);
   }
 }
 
 export class CommandStorageManager {
-  private storage: Map<string, boolean>;
+  private storage: Map<string, string>;
 
-  private key(chatId: number, userId?: number) {
-    return userId ? `${chatId}_${userId}` : chatId.toString();
+  private key({ fromId, chatId }: TChatSettings) {
+    return fromId ? `${chatId}_${fromId}` : chatId.toString();
   }
 
-  public add(chatId: number, userId: number | undefined, value: boolean) {
-    const key = this.key(chatId, userId);
-    this.storage.set(key, value);
+  public add(settings: TChatSettings, cmd: string) {
+    const key = this.key(settings);
+    this.storage.set(key, cmd);
   } 
 
-  public get(chatId: number, userId?: number): boolean {
-    const key = this.key(chatId, userId);
+  public get(settings: TChatSettings): string {
+    const key = this.key(settings);
     return this.storage.get(key);;
   }
 
-  public reset(chatId: number, userId?: number): void {
-    const key = this.key(chatId, userId);
+  public reset(settings: TChatSettings): void {
+    const key = this.key(settings);
     this.storage.delete(key);
   }
 }
