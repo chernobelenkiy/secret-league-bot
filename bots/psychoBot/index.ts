@@ -19,6 +19,7 @@ bot.on('message', async (msg) => {
   console.log('message: ', msg.text);
   console.log('userAccess: ', userAccess);
   console.log('userId: ', msg.from?.id);
+  console.groupEnd();
   
   if (userAccess.canReply) {
     const response = await new PromptManager(new SystemPrompt(userAccess), msg).generate();
