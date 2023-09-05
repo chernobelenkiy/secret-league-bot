@@ -1,2 +1,2 @@
-// import './secretLeague';
-require('./enkiyBoy');
+// import './enkiyBoy';
+import './psychoBot';

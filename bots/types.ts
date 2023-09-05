@@ -9,3 +9,8 @@ export type TMessage = {
 export interface ISystemPrompt {
   generatePrompt(): string;
 }
+
+export type TChatSettings = {
+  chatId: number;
+  fromId: number | undefined;
+}

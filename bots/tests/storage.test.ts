@@ -1,11 +1,11 @@
-import { StorageManager } from '../storage';
+import { MessageStorageManager } from '../storage';
 import { TMessage } from '../types';
 
 describe('StorageManager', () => {
-  let storage: StorageManager;
+  let storage: MessageStorageManager;
 
   beforeEach(() => {
-    storage = new StorageManager();
+    storage = new MessageStorageManager();
   });
 
   test('add and get messages', () => {

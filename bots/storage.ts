@@ -17,7 +17,7 @@ class Messages {
   }
 }
 
-export class StorageManager {
+export class MessageStorageManager {
   private storage: Map<string, Messages>;
 
   constructor() {
@@ -30,10 +30,10 @@ export class StorageManager {
 
   public add(chatId: number, userId: number | undefined, content: string, role: TRole) {
     const key = this.key(chatId, userId);
-    const storage = this.storage.get(key) || new Messages();
+    const messages = this.storage.get(key) || new Messages();
 
-    storage.add(content, role);
-    this.storage.set(key, storage);
+    messages.add(content, role);
+    this.storage.set(key, messages);
   } 
 
   public get(chatId: number, userId?: number): TMessage[] {
@@ -42,6 +42,32 @@ export class StorageManager {
 
     return storage.getMessages();
   }
+
+  public reset(chatId: number, userId?: number): void {
+    const key = this.key(chatId, userId);
+    this.storage.delete(key);
+  }
 }
 
-export const storageManager = new StorageManager();
+export class CommandStorageManager {
+  private storage: Map<string, boolean>;
+
+  private key(chatId: number, userId?: number) {
+    return userId ? `${chatId}_${userId}` : chatId.toString();
+  }
+
+  public add(chatId: number, userId: number | undefined, value: boolean) {
+    const key = this.key(chatId, userId);
+    this.storage.set(key, value);
+  } 
+
+  public get(chatId: number, userId?: number): boolean {
+    const key = this.key(chatId, userId);
+    return this.storage.get(key);;
+  }
+
+  public reset(chatId: number, userId?: number): void {
+    const key = this.key(chatId, userId);
+    this.storage.delete(key);
+  }
+}

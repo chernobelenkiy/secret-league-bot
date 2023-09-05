@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { PromptManager } from '../prompt';
-import { storageManager } from '../storage';
+import { CommandsManager } from './commands';
 import { createUserAccess } from './userAccess';
 import { SystemPrompt } from './systemPrompt';
 
@@ -8,12 +8,12 @@ if (!process.env.PSYCHO) {
   throw new Error('Telegram API key is needed');
 }
 
+const cmdManager = new CommandsManager();
 const bot = new TelegramBot(process.env.PSYCHO, { polling: true });
 
 bot.on('message', async (msg) => {
   if (!msg.text) return;
-  const botInfo = await bot.getMe();
-  const userAccess = createUserAccess(msg, botInfo);
+  const userAccess = createUserAccess(msg);
   
   console.group();
   console.log('message: ', msg.text);
@@ -21,14 +21,37 @@ bot.on('message', async (msg) => {
   console.log('userId: ', msg.from?.id);
   
   if (userAccess.canReply) {
-    storageManager.add(msg.chat.id, msg.from?.id, userAccess.message, 'user');
-    const messages = storageManager.get(msg.chat.id, msg.from?.id);
+    
     const systemPrompt = new SystemPrompt(userAccess);
-    const response = await new PromptManager(systemPrompt, messages).generate();
+    const promptManager = new PromptManager(systemPrompt, msg);
+    const response = await promptManager.generate();
     if (!response) return;
-    console.log('response: ', response);
-    console.groupEnd();
-    storageManager.add(msg.chat.id, msg.from?.id, response, 'assistant');
+    
     await bot.sendMessage(msg.chat.id, response, { reply_to_message_id: msg.message_id, parse_mode: 'HTML' });
+  }
+});
+
+bot.onText(/\/start/, (msg) => {
+  bot.sendMessage(msg.chat.id, 'Выбери из меню', {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          { text: 'Prompt', callback_data: 'prompt' },
+          { text: 'Reset', callback_data: 'reset' },
+        ],
+      ],
+    },
+  });
+});
+
+// Listen for button clicks
+bot.on('callback_query', (query) => {
+  const chatId = query.message.chat.id;
+  const data = query.data;
+
+  if (data === 'prompt') {
+    bot.sendMessage(chatId, 'You clicked Prompt button!');
+  } else if (data === 'reset') {
+    bot.sendMessage(chatId, 'You clicked Reset button!');
   }
 });

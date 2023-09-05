@@ -1,6 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { PromptManager } from '../prompt';
-import { storageManager } from '../storage';
+import { MessageStorageManager } from '../storage';
 import { createUserAccess } from './userAccess';
 import { SystemPrompt } from './systemPrompt';
 
@@ -19,16 +19,12 @@ bot.on('message', async (msg) => {
   console.log('message: ', msg.text);
   console.log('userAccess: ', userAccess);
   console.log('userId: ', msg.from?.id);
+  console.groupEnd();
   
   if (userAccess.canReply || userAccess.canReplyToUser) {
-    storageManager.add(msg.chat.id, msg.from?.id, userAccess.message, 'user');
-    const messages = storageManager.get(msg.chat.id, msg.from?.id);
     const systemPrompt = new SystemPrompt(userAccess);
-    const response = await new PromptManager(systemPrompt, messages).generate();
+    const response = await new PromptManager(systemPrompt, msg).generate();
     if (!response) return;
-    console.log('response: ', response);
-    console.groupEnd();
-    storageManager.add(msg.chat.id, msg.from?.id, response, 'assistant');
     await bot.sendMessage(msg.chat.id, response, { reply_to_message_id: msg.message_id, parse_mode: 'HTML' });
   }
 });
