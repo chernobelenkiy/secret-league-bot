@@ -1,4 +1,4 @@
-import { TChatSettings, ICommandsManager, TContext } from './types';
+import { TChatSettings, ICommandsManager, TContext } from '../types';
 
 class CommandStorageManager {
   private storage: Map<string, string> = new Map();

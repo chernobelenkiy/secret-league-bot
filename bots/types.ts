@@ -14,12 +14,12 @@ export type TChatSettings = {
 
 export type TContext = {
   settings: TChatSettings;
-  systemPrompt: ISystemPrompt;
+  systemPrompt: ISystemPromptManager;
   cmd: ICommandsManager;
   bot: TelegramBot;
 }
 
-export interface ISystemPrompt {
+export interface ISystemPromptManager {
   generatePrompt(): string;
   getPrompt(): string;
   savePrompt(prompt: string): void;

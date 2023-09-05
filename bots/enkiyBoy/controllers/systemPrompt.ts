@@ -1,11 +1,10 @@
-import TelegramBot from 'node-telegram-bot-api';
-import { SystemPrompt } from '../systemPrompt';
-import { ISystemPrompt, TChatSettings } from '../types';
-import { TUserAccess } from './userAccess';
+import { SystemPromptManager } from '../../controllers/systemPrompt';
+import { ISystemPromptManager, TChatSettings } from '../../types';
+import { TUserAccess } from '../helpers';
 
 const DEFAULT = 'Ты бот в телеграм канале. Твой характер резкий мальчишеский. Ты ничего не стесняешься и все говоришь прямо с черным юмором.'
 
-export class EnkiySystemPrompt extends SystemPrompt implements ISystemPrompt {
+export class EnkiySystemPrompt extends SystemPromptManager implements ISystemPromptManager {
   private userAccess: TUserAccess;
 
   constructor(chatSettings: TChatSettings, userAccess: TUserAccess) {

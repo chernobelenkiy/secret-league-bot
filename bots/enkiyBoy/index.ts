@@ -1,8 +1,8 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { PromptManager } from '../prompt';
-import { createChatSettings } from '../chatSettings';
-import { createUserAccess } from './userAccess';
-import { EnkiySystemPrompt } from './systemPrompt';
+import { PromptManager } from '../controllers/prompt';
+import { EnkiySystemPrompt } from './controllers/systemPrompt';
+import { createChatSettings } from '../helpers';
+import { createUserAccess } from './helpers';
 
 if (!process.env.ENKIY) {
   throw new Error('Telegram API key is needed');

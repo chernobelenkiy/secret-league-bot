@@ -1,4 +1,4 @@
-import { MessageStorageManager } from '../prompt';
+import { MessageStorageManager } from '../controllers/prompt';
 import { TMessage, TChatSettings } from '../types';
 
 describe('StorageManager', () => {

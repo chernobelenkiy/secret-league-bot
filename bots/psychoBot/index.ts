@@ -1,9 +1,9 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { PromptManager } from '../prompt';
-import { createChatSettings } from '../chatSettings';
-import { PsychoCommandsManager } from './commands';
-import { createUserAccess } from './userAccess';
-import { PsychoSystemPrompt } from './systemPrompt';
+import { PromptManager } from '../controllers/prompt';
+import { createChatSettings } from '../helpers';
+import { PsychoCommandsManager } from './controllers/commands';
+import { PsychoSystemPromptManager } from './controllers/systemPrompt';
+import { createUserAccess } from './helpers/userAccess';
 
 if (!process.env.PSYCHO) {
   throw new Error('Telegram API key is needed');
@@ -25,7 +25,7 @@ bot.on('message', async (msg) => {
   console.groupEnd();
   
   if (userAccess.canReply) {
-    const systemPrompt = new PsychoSystemPrompt(chatSettings)
+    const systemPrompt = new PsychoSystemPromptManager(chatSettings)
     const response = await new PromptManager(systemPrompt, chatSettings, msg.text).generate();
     if (!response) return;
 

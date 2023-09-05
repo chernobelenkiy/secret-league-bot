@@ -1,6 +1,6 @@
 import { Configuration, OpenAIApi } from 'openai';
-import { removeHashtags } from './hashTags';
-import { TMessage, ISystemPrompt, TRole, TChatSettings } from './types';
+import { removeHashtags } from '../helpers';
+import { TMessage, ISystemPromptManager, TRole, TChatSettings } from '../types';
 
 const LIMIT = 40;
 
@@ -59,7 +59,7 @@ export class PromptManager {
   private storage: MessageStorageManager = storage;
   private chatSettings: TChatSettings;
 
-  constructor(systemPrompt: ISystemPrompt, chatSettings: TChatSettings, text: string) {
+  constructor(systemPrompt: ISystemPromptManager, chatSettings: TChatSettings, text: string) {
     this.chatSettings = chatSettings;
     this.saveMessage(text, 'user');
     this.prompts = [

@@ -1,4 +1,4 @@
-import { TChatSettings, ISystemPrompt } from './types';
+import { TChatSettings, ISystemPromptManager } from '../types';
 
 class SystemPromptStorage {
   private storage: Map<string, string> = new Map();
@@ -25,7 +25,7 @@ class SystemPromptStorage {
 
 const storage = new SystemPromptStorage();
 
-export class SystemPrompt implements ISystemPrompt {
+export class SystemPromptManager implements ISystemPromptManager {
   private storage: SystemPromptStorage = storage;
   private default: string;
   private chatSettings: TChatSettings;
