@@ -21,12 +21,8 @@ bot.on('message', async (msg) => {
   console.log('userId: ', msg.from?.id);
   
   if (userAccess.canReply) {
-    
-    const systemPrompt = new SystemPrompt(userAccess);
-    const promptManager = new PromptManager(systemPrompt, msg);
-    const response = await promptManager.generate();
+    const response = await new PromptManager(new SystemPrompt(userAccess), msg).generate();
     if (!response) return;
-    
     await bot.sendMessage(msg.chat.id, response, { reply_to_message_id: msg.message_id, parse_mode: 'HTML' });
   }
 });
