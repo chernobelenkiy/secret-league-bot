@@ -1,20 +1,22 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { PromptManager } from '../prompt';
-import { CommandsManager } from '../commands';
+import { createChatSettings } from '../chatSettings';
+import { PsychoCommandsManager } from './commands';
 import { createUserAccess } from './userAccess';
-import { SystemPrompt } from './systemPrompt';
+import { PsychoSystemPrompt } from './systemPrompt';
 
 if (!process.env.PSYCHO) {
   throw new Error('Telegram API key is needed');
 }
 
-
 const bot = new TelegramBot(process.env.PSYCHO, { polling: true });
 
 bot.on('message', async (msg) => {
   if (!msg.text) return;
-  const cmdManager = new CommandsManager(msg);
-  const userAccess = createUserAccess(msg, cmdManager);
+  
+  const chatSettings = createChatSettings(msg);
+  const cmdManager = new PsychoCommandsManager(chatSettings);
+  const userAccess = createUserAccess(msg, cmdManager.canCommand() || cmdManager.isCommand(msg.text));
   
   console.group();
   console.log('message: ', msg.text);
@@ -23,7 +25,8 @@ bot.on('message', async (msg) => {
   console.groupEnd();
   
   if (userAccess.canReply) {
-    const response = await new PromptManager(new SystemPrompt(userAccess), msg).generate();
+    const systemPrompt = new PsychoSystemPrompt(chatSettings)
+    const response = await new PromptManager(systemPrompt, chatSettings, msg.text).generate();
     if (!response) return;
 
     await bot.sendMessage(
@@ -31,6 +34,8 @@ bot.on('message', async (msg) => {
       response,
       { reply_to_message_id: msg.message_id, parse_mode: 'HTML' }
     );
+  } else if (cmdManager.canCommand()) {
+    // cmdManager.command();
   }
 });
 
@@ -49,12 +54,5 @@ bot.onText(/\/start/, (msg) => {
 
 // Listen for button clicks
 bot.on('callback_query', (query) => {
-  const chatId = query.message.chat.id;
-  const data = query.data;
-
-  if (data === 'prompt') {
-    bot.sendMessage(chatId, 'You clicked Prompt button!');
-  } else if (data === 'reset') {
-    bot.sendMessage(chatId, 'You clicked Reset button!');
-  }
+  // new PsychoCommandsManager(query.message).command(query.data);
 });

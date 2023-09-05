@@ -1,17 +1,17 @@
-import { TUserAccess } from './userAccess';
-import { ISystemPrompt } from '../types';
+import TelegramBot from 'node-telegram-bot-api';
+import { SystemPrompt } from '../systemPrompt';
+import { ISystemPrompt, TChatSettings } from '../types';
 
-const systemPrompt = 'Ты бот для психологической самодиагностики. Диагностика проходит в три этапа.'
+const DEFAULT = 'Ты бот для психологической самодиагностики. Диагностика проходит в три этапа.'
 
-export class SystemPrompt implements ISystemPrompt {
-  private userAccess: TUserAccess;
-
-  constructor(userAccess: TUserAccess) {
-    this.userAccess = userAccess;
+export class PsychoSystemPrompt extends SystemPrompt implements ISystemPrompt {
+  
+  constructor(chatSettings: TChatSettings) {
+    super(DEFAULT, chatSettings);
   }
 
   generatePrompt() {
-    return systemPrompt;
+    return this.getPrompt();
   }
 }
 

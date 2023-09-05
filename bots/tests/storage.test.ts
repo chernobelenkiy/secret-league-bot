@@ -1,4 +1,4 @@
-import { MessageStorageManager } from '../storage';
+import { MessageStorageManager } from '../prompt';
 import { TMessage, TChatSettings } from '../types';
 
 describe('StorageManager', () => {
