@@ -12,7 +12,7 @@ class CommandStorageManager {
     this.storage.set(key, cmd);
   } 
 
-  public get(settings: TChatSettings): string {
+  public get(settings: TChatSettings): string | undefined {
     const key = this.key(settings);
     return this.storage.get(key);;
   }
