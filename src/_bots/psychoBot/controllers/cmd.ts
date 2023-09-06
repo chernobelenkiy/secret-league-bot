@@ -1,11 +1,12 @@
 import { CommandsManager } from '../../../controllers/cmd';
 import { ICommandsManager, TContext } from '../../../types';
-import { PromptCommand, ResetCommand } from '../commands';
+import { PromptCommand, ResetCommand, CancelCommand } from '../commands';
 import { EPayloads } from '../types';
 
 const commands = {
   [EPayloads.prompt]: PromptCommand,
-  [EPayloads.reset]: ResetCommand
+  [EPayloads.reset]: ResetCommand,
+  [EPayloads.cancel]: CancelCommand
 }
 
 export class PsychoCommandsManager extends CommandsManager implements ICommandsManager {

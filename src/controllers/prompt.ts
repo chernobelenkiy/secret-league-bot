@@ -57,11 +57,15 @@ export class PromptManager implements IPromptManager {
   private storage: MessageStorageManager = storage;
 
   saveMessage(ctx: TContext, role: TRole = 'user', text: string) {
-    this.storage.add(ctx.chatData, removeHashtags(text), role);
+    this.storage.add(ctx.data, removeHashtags(text), role);
   }
 
   getMessages(ctx: TContext) {
-    return this.storage.get(ctx.chatData);
+    return this.storage.get(ctx.data);
+  }
+
+  resetMessags(ctx: TContext) {
+    this.storage.reset(ctx.data);
   }
 
   createPrompts(ctx: TContext, text: string) {

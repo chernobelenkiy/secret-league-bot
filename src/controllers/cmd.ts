@@ -34,22 +34,22 @@ export class CommandsManager implements ICommandsManager {
   }
 
   canCommand(ctx: TContext) {
-    return !!this.storage.get(ctx.chatData);
+    return !!this.storage.get(ctx.data);
   }
 
   getCommand(ctx: TContext) {
-    return this.storage.get(ctx.chatData);
+    return this.storage.get(ctx.data);
   }
 
   saveCommand(ctx: TContext, cmd: string) {
-    this.storage.add(ctx.chatData, cmd);
+    this.storage.add(ctx.data, cmd);
   }
 
   hasCommand(ctx: TContext, cmd: string) {
-    return this.storage.get(ctx.chatData) === cmd;
+    return this.storage.get(ctx.data) === cmd;
   }
 
   resetCommand(ctx: TContext) {
-    this.storage.reset(ctx.chatData);
+    this.storage.reset(ctx.data);
   }
 }

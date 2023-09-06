@@ -10,10 +10,11 @@ export type TMessage = {
 export type TChatData = {
   chatId: number;
   fromId: number | undefined;
+  text: string;
 }
 
 export type TContext = {
-  chatData: TChatData;
+  data: TChatData;
   userAccess: IUserAccess;
   systemPrompt: ISystemPromptManager;
   prompt: IPromptManager;
@@ -33,6 +34,7 @@ export interface IPromptManager {
   generate(ctx: TContext): Promise<string | undefined>;
   getMessages(ctx: TContext): TMessage[];
   saveMessage(ctx: TContext, role: TRole, text: string): void;
+  resetMessags(ctx: TContext): void;
   createPrompts(ctx: TContext, text: string): TContext;
 }
 

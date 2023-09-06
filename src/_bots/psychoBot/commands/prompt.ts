@@ -1,15 +1,30 @@
 import { ICommand, TContext } from '../../../types';
 import { EPayloads } from '../types';
 
+const replyMarkup = {
+  reply_markup: {
+  inline_keyboard: [
+      [
+        { text: 'Отменить', callback_data: 'cancel' },
+      ],
+    ],
+  }
+};
+
 export class PromptCommand implements ICommand {
   execute(ctx: TContext) {
-    if (!ctx.cmd) return;
+    const { cmd, systemPrompt, bot } = ctx;
+    if (!cmd) return;
 
-    if (ctx.cmd.hasCommand(ctx, EPayloads.prompt)) {
-      ctx.cmd.resetCommand(ctx);
+    if (cmd.hasCommand(ctx, EPayloads.prompt)) {
+      systemPrompt.savePrompt(ctx, ctx.data.text);
+      cmd.resetCommand(ctx);
     } else {
-      ctx.cmd.saveCommand(ctx, EPayloads.prompt);
-      ctx.bot?.sendMessage(ctx.chatData.chatId, 'Добавьте системный промпт для бота.');
+      cmd.saveCommand(ctx, EPayloads.prompt);
+      bot?.sendMessage(ctx.data.chatId, `
+        Добавьте системный промпт для бота.
+        Текущий промпт: ${systemPrompt.getPrompt(ctx)}
+      `, replyMarkup);
     }
   }
 }

@@ -1,8 +1,7 @@
 import { ICommand, TContext } from '../../../types';
 
-export class ResetCommand implements ICommand {
+export class CancelCommand implements ICommand {
   execute(ctx: TContext) {
     ctx.cmd?.resetCommand(ctx);
-    ctx.prompt.resetMessags(ctx);
   }
 }

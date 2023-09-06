@@ -6,9 +6,10 @@ import { PsychoSystemPromptManager } from './controllers/systemPrompt';
 import { createUserAccess } from './helpers';
 
 export const createContext = (msg: TelegramBot.Message, bot: TelegramBot): TContext => ({
-  chatData: {
+  data: {
     chatId: msg.chat.id,
-    fromId: msg.from?.id
+    fromId: msg.from?.id,
+    text: msg.text || '',
   },
   bot,
   prompts: [],

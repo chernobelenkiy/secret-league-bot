@@ -1,4 +1,5 @@
 export enum EPayloads {
   prompt = 'prompt',
-  reset = 'reset'
+  reset = 'reset',
+  cancel = 'cancel'
 }

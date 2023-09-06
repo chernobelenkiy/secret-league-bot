@@ -5,9 +5,10 @@ import { EnkiySystemPrompt } from './controllers/systemPrompt';
 import { createUserAccess } from './helpers';
 
 export const createContext = (msg: TelegramBot.Message, botInfo: TelegramBot.User): TContext => ({
-  chatData: {
+  data: {
     chatId: msg.chat.id,
-    fromId: msg.from?.id
+    fromId: msg.from?.id,
+    text: msg.text || ''
   },
   prompts: [],
   userAccess: createUserAccess(msg, botInfo),

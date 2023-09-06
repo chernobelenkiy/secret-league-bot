@@ -38,14 +38,14 @@ export class SystemPromptManager implements ISystemPromptManager {
   }
 
   getPrompt(ctx: TContext) {
-    return this.storage.get(ctx.chatData) || this.default;
+    return this.storage.get(ctx.data) || this.default;
   }
 
   savePrompt(ctx: TContext, prompt: string) {
-    this.storage.add(ctx.chatData, prompt);
+    this.storage.add(ctx.data, prompt);
   }
 
   resetPrompt(ctx: TContext) {
-    this.storage.reset(ctx.chatData);
+    this.storage.reset(ctx.data);
   }
 }
