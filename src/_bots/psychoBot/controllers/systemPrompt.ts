@@ -7,9 +7,5 @@ export class PsychoSystemPromptManager extends SystemPromptManager implements IS
   constructor() {
     super(DEFAULT);
   }
-
-  generatePrompt(ctx: TContext) {
-    return this.getPrompt(ctx);
-  }
 }
 
