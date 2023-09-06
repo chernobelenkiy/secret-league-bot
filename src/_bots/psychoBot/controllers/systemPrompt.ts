@@ -1,5 +1,5 @@
-import { SystemPromptManager } from '../../controllers/systemPrompt';
-import { ISystemPromptManager, TChatSettings } from '../../types';
+import { SystemPromptManager } from '../../../controllers/systemPrompt';
+import { ISystemPromptManager, TChatSettings } from '../../../types';
 
 const DEFAULT = 'Ты бот для психологической самодиагностики. Диагностика проходит в три этапа.'
 

@@ -1,5 +1,5 @@
-import { SystemPromptManager } from '../../controllers/systemPrompt';
-import { ISystemPromptManager, TChatSettings } from '../../types';
+import { SystemPromptManager } from '../../../controllers/systemPrompt';
+import { ISystemPromptManager, TChatSettings } from '../../../types';
 import { TUserAccess } from '../helpers';
 
 const DEFAULT = 'Ты бот в телеграм канале. Твой характер резкий мальчишеский. Ты ничего не стесняешься и все говоришь прямо с черным юмором.'

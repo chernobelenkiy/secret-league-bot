@@ -1,9 +1,9 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { PromptManager } from '../controllers/prompt';
-import { createChatSettings } from '../helpers';
+import { PromptManager } from '../../controllers/prompt';
+import { createChatSettings } from '../../helpers';
 import { PsychoCommandsManager } from './controllers/commands';
 import { PsychoSystemPromptManager } from './controllers/systemPrompt';
-import { createUserAccess } from './helpers/userAccess';
+import { createUserAccess } from './helpers';
 
 if (!process.env.PSYCHO) {
   throw new Error('Telegram API key is needed');

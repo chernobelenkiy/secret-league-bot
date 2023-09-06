@@ -3,7 +3,7 @@ import http from 'http';
 
 dotenv.config();
 
-import './bots/index.ts';
+import './src/index.ts';
 
 http.createServer((_, res) => {
   res.writeHead(200, 'ok');

@@ -1,5 +1,5 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { extractHashtags } from '../../helpers/hashTags';
+import { extractHashtags } from '../../../helpers/hashTags';
 
 if (!process.env.ENKIY) {
   throw new Error('Telegram API key is needed');

@@ -1,2 +1,0 @@
-import './enkiyBoy';
-// import './psychoBot';

@@ -1,7 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { PromptManager } from '../controllers/prompt';
+import { PromptManager } from '../../controllers/prompt';
+import { createChatSettings } from '../../helpers';
 import { EnkiySystemPrompt } from './controllers/systemPrompt';
-import { createChatSettings } from '../helpers';
 import { createUserAccess } from './helpers';
 
 if (!process.env.ENKIY) {

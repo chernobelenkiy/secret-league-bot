@@ -1,5 +1,5 @@
-import { CommandsManager } from '../../controllers/commands';
-import { ICommand, ICommandsManager, TContext, TChatSettings } from '../../types';
+import { CommandsManager } from '../../../controllers/commands';
+import { ICommand, ICommandsManager, TContext, TChatSettings } from '../../../types';
 
 export enum EPayloads {
   prompt = 'prompt',
