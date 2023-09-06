@@ -18,7 +18,7 @@ export type TContext = {
   systemPrompt: ISystemPromptManager;
   prompt: IPromptManager;
   cmd?: ICommandsManager;
-  prompts?: TMessage[];
+  prompts: TMessage[];
   bot?: TelegramBot;
 }
 

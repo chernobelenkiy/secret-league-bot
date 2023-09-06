@@ -9,6 +9,7 @@ export const createContext = (msg: TelegramBot.Message, botInfo: TelegramBot.Use
     chatId: msg.chat.id,
     fromId: msg.from?.id
   },
+  prompts: [],
   userAccess: createUserAccess(msg, botInfo),
   systemPrompt: new EnkiySystemPrompt(),
   prompt: new PromptManager()

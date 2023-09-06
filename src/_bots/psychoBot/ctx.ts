@@ -11,6 +11,7 @@ export const createContext = (msg: TelegramBot.Message, bot: TelegramBot): TCont
     fromId: msg.from?.id
   },
   bot,
+  prompts: [],
   userAccess: createUserAccess(msg),
   cmd: new PsychoCommandsManager(),
   systemPrompt: new PsychoSystemPromptManager(),
