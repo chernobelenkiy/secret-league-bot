@@ -1,5 +1,5 @@
-import { ICommand, TContext } from '../../../../types';
-import { EPayloads } from '../../types';
+import { ICommand, TContext } from '../../../types';
+import { EPayloads } from '../types';
 
 export class PromptCommand implements ICommand {
   execute(ctx: TContext) {

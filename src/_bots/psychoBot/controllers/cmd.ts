@@ -1,7 +1,7 @@
 import { CommandsManager } from '../../../controllers/cmd';
 import { ICommandsManager, TContext } from '../../../types';
+import { PromptCommand, ResetCommand } from '../commands';
 import { EPayloads } from '../types';
-import { PromptCommand, ResetCommand } from './commands';
 
 const commands = {
   [EPayloads.prompt]: PromptCommand,
