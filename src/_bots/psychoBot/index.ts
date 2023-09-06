@@ -1,5 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { createContext } from './ctx';
+import { EPayloads } from './types';
 
 if (!process.env.PSYCHO_KEY) {
   throw new Error('Telegram API key is needed');
@@ -35,16 +36,8 @@ bot.on('message', async (msg) => {
 });
 
 bot.onText(/\/start/, (msg) => {
-  bot.sendMessage(msg.chat.id, 'Выбери из меню', {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          { text: 'Добавить системный промпт', callback_data: 'prompt' },
-          { text: 'Сбросить', callback_data: 'reset' },
-        ],
-      ],
-    },
-  });
+  const ctx = createContext(msg, bot);
+  ctx.cmd.command(ctx, EPayloads.start);
 });
 
 // Listen for button clicks
