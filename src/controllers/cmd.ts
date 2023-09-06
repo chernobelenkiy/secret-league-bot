@@ -29,6 +29,10 @@ const storage = new CommandStorageManager();
 export class CommandsManager implements ICommandsManager {
   protected storage: CommandStorageManager = storage;
 
+  command(_: TContext, cmd: string) {
+    throw new Error(`Method not implemented. Command: ${cmd}`);
+  }
+
   isCommand(cmd: string) {
     return COMMANDS.includes(cmd);
   }

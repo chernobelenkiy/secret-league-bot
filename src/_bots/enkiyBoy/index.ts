@@ -10,7 +10,7 @@ const bot = new TelegramBot(process.env.ENKIY_KEY, { polling: true });
 bot.on('message', async (msg) => {
   if (!msg.text) return;
   const botInfo = await bot.getMe();
-  let ctx = createContext(msg, botInfo);
+  let ctx = createContext(msg, botInfo, bot);
   
   console.group();
   console.log('message: ', msg.text);

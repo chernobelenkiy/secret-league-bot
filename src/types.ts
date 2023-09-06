@@ -18,9 +18,9 @@ export type TContext = {
   userAccess: IUserAccess;
   systemPrompt: ISystemPromptManager;
   prompt: IPromptManager;
-  cmd?: ICommandsManager;
+  cmd: ICommandsManager;
   prompts: TMessage[];
-  bot?: TelegramBot;
+  bot: TelegramBot;
 }
 
 export interface IUserAccess {
@@ -52,6 +52,7 @@ export interface ICommandsManager {
   resetCommand(ctx: TContext): void;
   canCommand(ctx: TContext): boolean;
   isCommand(cmd: string): boolean;
+  command(ctx: TContext, cmd?: string): void;
 }
 
 export interface ICommand {

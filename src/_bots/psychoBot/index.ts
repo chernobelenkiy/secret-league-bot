@@ -29,8 +29,8 @@ bot.on('message', async (msg) => {
       response,
       { reply_to_message_id: msg.message_id, parse_mode: 'HTML' }
     );
-  } else if (ctx.cmd?.canCommand(ctx)) {
-    // cmdManager.command();
+  } else if (ctx.cmd.canCommand(ctx)) {
+    ctx.cmd.command(ctx);
   }
 });
 
@@ -39,8 +39,8 @@ bot.onText(/\/start/, (msg) => {
     reply_markup: {
       inline_keyboard: [
         [
-          { text: 'Prompt', callback_data: 'prompt' },
-          { text: 'Reset', callback_data: 'reset' },
+          { text: 'Добавить системный промпт', callback_data: 'prompt' },
+          { text: 'Сбросить', callback_data: 'reset' },
         ],
       ],
     },
@@ -49,5 +49,7 @@ bot.onText(/\/start/, (msg) => {
 
 // Listen for button clicks
 bot.on('callback_query', (query) => {
-  // new PsychoCommandsManager(query.message).command(query.data);
+  if (!query.message || !query.data) return;
+  const ctx = createContext(query.message, bot);
+  ctx.cmd.command(ctx, query.data);
 });
