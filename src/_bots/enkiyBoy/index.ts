@@ -1,30 +1,26 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { PromptManager } from '../../controllers/prompt';
-import { createChatSettings } from '../../helpers';
-import { EnkiySystemPrompt } from './controllers/systemPrompt';
-import { createUserAccess } from './helpers';
+import { createContext } from './ctx';
 
-if (!process.env.ENKIY) {
+if (!process.env.ENKIY_KEY) {
   throw new Error('Telegram API key is needed');
 }
 
-const bot = new TelegramBot(process.env.ENKIY, { polling: true });
+const bot = new TelegramBot(process.env.ENKIY_KEY, { polling: true });
 
 bot.on('message', async (msg) => {
   if (!msg.text) return;
   const botInfo = await bot.getMe();
-  const userAccess = createUserAccess(msg, botInfo);
-  const chatSettings = createChatSettings(msg);
+  let ctx = createContext(msg, botInfo);
   
   console.group();
   console.log('message: ', msg.text);
-  console.log('userAccess: ', userAccess);
-  console.log('userId: ', msg.from?.id);
+  console.log('ctx: ', ctx);
   console.groupEnd();
   
-  if (userAccess.canReply || userAccess.canReplyToUser) {
-    const systemPrompt = new EnkiySystemPrompt(chatSettings, userAccess);
-    const response = await new PromptManager(systemPrompt, chatSettings, msg.text).generate();
+  if (ctx.userAccess.canReply || ctx.userAccess.canReplyToUser) {
+    ctx = ctx.prompt.createPrompts(ctx, msg.text);
+    const response = await ctx.prompt.generate(ctx);
+    console.log('prompts: ', ctx.prompts);
     if (!response) return;
     await bot.sendMessage(msg.chat.id, response, { reply_to_message_id: msg.message_id, parse_mode: 'HTML' });
   }

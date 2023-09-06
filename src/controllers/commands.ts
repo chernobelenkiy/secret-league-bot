@@ -1,24 +1,24 @@
-import { TChatSettings, ICommandsManager, TContext } from '../types';
+import { ICommandsManager, TContext, TChatData } from '../types';
 
 class CommandStorageManager {
   private storage: Map<string, string> = new Map();
 
-  private key({ fromId, chatId }: TChatSettings) {
+  private key({ fromId, chatId }: TChatData) {
     return fromId ? `${chatId}_${fromId}` : chatId.toString();
   }
 
-  public add(settings: TChatSettings, cmd: string) {
-    const key = this.key(settings);
+  public add(data: TChatData, cmd: string) {
+    const key = this.key(data);
     this.storage.set(key, cmd);
   } 
 
-  public get(settings: TChatSettings): string | undefined {
-    const key = this.key(settings);
+  public get(data: TChatData): string | undefined {
+    const key = this.key(data);
     return this.storage.get(key);;
   }
 
-  public reset(settings: TChatSettings): void {
-    const key = this.key(settings);
+  public reset(data: TChatData): void {
+    const key = this.key(data);
     this.storage.delete(key);
   }
 }
@@ -28,37 +28,28 @@ const storage = new CommandStorageManager();
 
 export class CommandsManager implements ICommandsManager {
   protected storage: CommandStorageManager = storage;
-  public chatSettings: TChatSettings;
-
-  constructor(chatSettings: TChatSettings) {
-    this.chatSettings = chatSettings;
-  }
-
-  command(_: TContext) {
-    throw new Error('Method not implemented.');
-  }
 
   isCommand(cmd: string) {
     return COMMANDS.includes(cmd);
   }
 
-  canCommand() {
-    return !!this.storage.get(this.chatSettings);
+  canCommand(ctx: TContext) {
+    return !!this.storage.get(ctx.chatData);
   }
 
-  getCommand() {
-    return this.storage.get(this.chatSettings);
+  getCommand(ctx: TContext) {
+    return this.storage.get(ctx.chatData);
   }
 
-  saveCommand(cmd: string) {
-    this.storage.add(this.chatSettings, cmd);
+  saveCommand(ctx: TContext, cmd: string) {
+    this.storage.add(ctx.chatData, cmd);
   }
 
-  hasCommand(cmd: string) {
-    return this.storage.get(this.chatSettings) === cmd;
+  hasCommand(ctx: TContext, cmd: string) {
+    return this.storage.get(ctx.chatData) === cmd;
   }
 
-  resetCommand() {
-    this.storage.reset(this.chatSettings);
+  resetCommand(ctx: TContext) {
+    this.storage.reset(ctx.chatData);
   }
 }

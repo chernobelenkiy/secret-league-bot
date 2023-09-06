@@ -1,32 +1,27 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { PromptManager } from '../../controllers/prompt';
-import { createChatSettings } from '../../helpers';
-import { PsychoCommandsManager } from './controllers/commands';
-import { PsychoSystemPromptManager } from './controllers/systemPrompt';
-import { createUserAccess } from './helpers';
+import { createContext } from './ctx';
 
-if (!process.env.PSYCHO) {
+if (!process.env.PSYCHO_KEY) {
   throw new Error('Telegram API key is needed');
 }
 
-const bot = new TelegramBot(process.env.PSYCHO, { polling: true });
+const bot = new TelegramBot(process.env.PSYCHO_KEY, { polling: true });
 
 bot.on('message', async (msg) => {
   if (!msg.text) return;
   
-  const chatSettings = createChatSettings(msg);
-  const cmdManager = new PsychoCommandsManager(chatSettings);
-  const userAccess = createUserAccess(msg, cmdManager.canCommand() || cmdManager.isCommand(msg.text));
+  let ctx = createContext(msg, bot);
+  const isCMDRelated = ctx.cmd?.canCommand(ctx) || ctx.cmd?.isCommand(msg.text);
   
   console.group();
   console.log('message: ', msg.text);
-  console.log('userAccess: ', userAccess);
-  console.log('userId: ', msg.from?.id);
+  console.log('ctx: ', ctx);
   console.groupEnd();
   
-  if (userAccess.canReply) {
-    const systemPrompt = new PsychoSystemPromptManager(chatSettings)
-    const response = await new PromptManager(systemPrompt, chatSettings, msg.text).generate();
+  if (ctx.userAccess.canReply && !isCMDRelated) {
+    ctx = ctx.prompt.createPrompts(ctx, msg.text);
+    console.log('prompts: ', ctx.prompts);
+    const response = await ctx.prompt.generate(ctx);
     if (!response) return;
 
     await bot.sendMessage(
@@ -34,7 +29,7 @@ bot.on('message', async (msg) => {
       response,
       { reply_to_message_id: msg.message_id, parse_mode: 'HTML' }
     );
-  } else if (cmdManager.canCommand()) {
+  } else if (ctx.cmd?.canCommand(ctx)) {
     // cmdManager.command();
   }
 });

@@ -13,12 +13,12 @@ export type TUserAccess = {
   hashTags: { [key: string]: boolean; }
 }
 
-export const createUserAccess = (msg: TelegramBot.Message, cmdRelated: boolean): TUserAccess => {
+export const createUserAccess = (msg: TelegramBot.Message): TUserAccess => {
   const { text, chat: { type: chatType }, from } = msg;
   const hashTags = extractHashtags(text || '');
   const userId = from?.id?.toString();
   const whiteListUser = !!userId && WHITE_LIST_IDS.includes(userId);
-  const canReply = !cmdRelated && (chatType === 'private') && !!userId && whiteListUser;
+  const canReply = (chatType === 'private') && !!userId && whiteListUser;
 
   return {
     whiteListUser,

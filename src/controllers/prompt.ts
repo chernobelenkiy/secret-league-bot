@@ -1,6 +1,6 @@
 import { Configuration, OpenAIApi } from 'openai';
 import { removeHashtags } from '../helpers';
-import { TMessage, ISystemPromptManager, TRole, TChatSettings } from '../types';
+import { TMessage, TRole, TContext, TChatData, IPromptManager } from '../types';
 
 const LIMIT = 40;
 
@@ -22,27 +22,27 @@ class Messages {
 export class MessageStorageManager {
   private storage: Map<string, Messages> = new Map<string, Messages>();
 
-  private key({ fromId, chatId }: TChatSettings) {
+  private key({ fromId, chatId }: TChatData) {
     return fromId ? `${chatId}_${fromId}` : chatId.toString();
   }
 
-  public add(settings: TChatSettings, content: string, role: TRole) {
-    const key = this.key(settings);
+  public add(data: TChatData, content: string, role: TRole) {
+    const key = this.key(data);
     const messages = this.storage.get(key) || new Messages();
 
     messages.add(content, role);
     this.storage.set(key, messages);
   } 
 
-  public get(settings: TChatSettings): TMessage[] {
-    const key = this.key(settings);
+  public get(data: TChatData): TMessage[] {
+    const key = this.key(data);
     const storage = this.storage.get(key) || new Messages();
 
     return storage.getMessages();
   }
 
-  public reset(settings: TChatSettings): void {
-    const key = this.key(settings);
+  public reset(data: TChatData): void {
+    const key = this.key(data);
     this.storage.delete(key);
   }
 }
@@ -53,41 +53,39 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 const storage = new MessageStorageManager();
 
-//ToDo decouple settings and saving?
-export class PromptManager {
-  private prompts: TMessage[] = [];
+export class PromptManager implements IPromptManager {
   private storage: MessageStorageManager = storage;
-  private chatSettings: TChatSettings;
 
-  constructor(systemPrompt: ISystemPromptManager, chatSettings: TChatSettings, text: string) {
-    this.chatSettings = chatSettings;
-    this.saveMessage(text, 'user');
-    this.prompts = [
-      { role: 'system', content: systemPrompt.generatePrompt() },
-      ...this.fetchMessages()
-    ];
+  saveMessage(ctx: TContext, role: TRole = 'user', text: string) {
+    this.storage.add(ctx.chatData, removeHashtags(text), role);
   }
 
-  saveMessage(text: string, role: TRole = 'user') {
-    this.storage.add(this.chatSettings, removeHashtags(text), role);
+  getMessages(ctx: TContext) {
+    return this.storage.get(ctx.chatData);
   }
 
-  fetchMessages() {
-    return this.storage.get(this.chatSettings);
+  createPrompts(ctx: TContext, text: string) {
+    this.saveMessage(ctx, 'user', text);
+    return Object.assign(ctx, {
+      prompts: [
+        { role: 'system', content: ctx.systemPrompt.generate(ctx) },
+        ...this.getMessages(ctx)
+      ]
+    });
   }
 
-  generate = async () => {
+  generate = async (ctx: TContext) => {
     try {
       const completion = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
-        messages: this.prompts,
+        messages: ctx.prompts,
         temperature: 0.5,
       });
       const response = completion.data.choices[0].message?.content;
       if (!response) return; 
 
       console.log('response: ', response);
-      this.saveMessage(response, 'assistant');
+      this.saveMessage(ctx, 'assistant', response);
       return response;
     } catch(error) {
       if (error.response) {

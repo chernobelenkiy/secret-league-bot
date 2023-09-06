@@ -7,31 +7,49 @@ export type TMessage = {
   content: string;
 }
 
-export type TChatSettings = {
+export type TChatData = {
   chatId: number;
   fromId: number | undefined;
 }
 
 export type TContext = {
-  settings: TChatSettings;
+  chatData: TChatData;
+  userAccess: IUserAccess;
   systemPrompt: ISystemPromptManager;
-  cmd: ICommandsManager;
-  bot: TelegramBot;
+  prompt: IPromptManager;
+  cmd?: ICommandsManager;
+  prompts?: TMessage[];
+  bot?: TelegramBot;
+}
+
+export interface IUserAccess {
+  admin?: boolean;
+  channel?: boolean;
+  canReply: boolean;
+  canReplyToUser?: boolean;
+}
+
+export interface IPromptManager {
+  generate(ctx: TContext): Promise<string | undefined>;
+  getMessages(ctx: TContext): TMessage[];
+  saveMessage(ctx: TContext, role: TRole, text: string): void;
+  createPrompts(ctx: TContext, text: string): TContext;
 }
 
 export interface ISystemPromptManager {
-  generatePrompt(): string;
-  getPrompt(): string;
-  savePrompt(prompt: string): void;
-  resetPrompt(): void;
+  generate(ctx: TContext): string;
+  getPrompt(ctx: TContext): string;
+  savePrompt(ctx: TContext, prompt: string): void;
+  resetPrompt(ctx: TContext): void;
 }
 
 export interface ICommandsManager {
-  command(ctx?: TContext): void;
-  getCommand(): string | undefined;
-  saveCommand(cmd: string): void;
-  hasCommand(cmd: string): boolean;
-  resetCommand(): void;
+  getCommand(ctx: TContext): string | undefined;
+  saveCommand(ctx: TContext, cmd: string): void;
+  hasCommand(ctx: TContext, cmd: string): boolean;
+  resetCommand(ctx: TContext): void;
+  canCommand(ctx: TContext): boolean;
+  isCommand(cmd: string): boolean;
 }
 
 export interface ICommand {

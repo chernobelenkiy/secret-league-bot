@@ -1,24 +1,24 @@
-import { TChatSettings, ISystemPromptManager } from '../types';
+import { TContext, TChatData, ISystemPromptManager } from '../types';
 
 class SystemPromptStorage {
   private storage: Map<string, string> = new Map();
 
-  private key({ fromId, chatId }: TChatSettings) {
+  private key({ fromId, chatId }: TChatData) {
     return fromId ? `${chatId}_${fromId}` : chatId.toString();
   }
 
-  public add(settings: TChatSettings, prompt: string) {
-    const key = this.key(settings);
+  public add(data: TChatData, prompt: string) {
+    const key = this.key(data);
     this.storage.set(key, prompt);
   } 
 
-  public get(settings: TChatSettings): string | undefined {
-    const key = this.key(settings);
+  public get(data: TChatData): string | undefined {
+    const key = this.key(data);
     return this.storage.get(key);;
   }
 
-  public reset(settings: TChatSettings): void {
-    const key = this.key(settings);
+  public reset(data: TChatData): void {
+    const key = this.key(data);
     this.storage.delete(key);
   }
 }
@@ -28,26 +28,24 @@ const storage = new SystemPromptStorage();
 export class SystemPromptManager implements ISystemPromptManager {
   private storage: SystemPromptStorage = storage;
   private default: string;
-  private chatSettings: TChatSettings;
 
-  constructor(defaultPrompt: string, chatSettings: TChatSettings) {
+  constructor(defaultPrompt: string) {
     this.default = defaultPrompt;
-    this.chatSettings = chatSettings;
   }
 
-  generatePrompt() {
-    return this.getPrompt();
+  generate(ctx: TContext) {
+    return this.getPrompt(ctx);
   }
 
-  getPrompt() {
-    return this.storage.get(this.chatSettings) || this.default;
+  getPrompt(ctx: TContext) {
+    return this.storage.get(ctx.chatData) || this.default;
   }
 
-  savePrompt(prompt: string) {
-    this.storage.add(this.chatSettings, prompt);
+  savePrompt(ctx: TContext, prompt: string) {
+    this.storage.add(ctx.chatData, prompt);
   }
 
-  resetPrompt() {
-    this.storage.reset(this.chatSettings);
+  resetPrompt(ctx: TContext) {
+    this.storage.reset(ctx.chatData);
   }
 }

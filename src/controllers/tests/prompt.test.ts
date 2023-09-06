@@ -1,13 +1,13 @@
-import { MessageStorageManager } from '../controllers/prompt';
-import { TMessage, TChatSettings } from '../types';
+import { MessageStorageManager } from '../prompt';
+import { TMessage, TChatData } from '../../types';
 
 describe('StorageManager', () => {
   let storage: MessageStorageManager;
-  let chatSettings: TChatSettings;
+  let data: TChatData;
 
   beforeEach(() => {
     storage = new MessageStorageManager();
-    chatSettings = {
+    data = {
       chatId: 123,
       fromId: 456
     };
@@ -17,15 +17,15 @@ describe('StorageManager', () => {
     const message1: TMessage = { content: 'Hello, world!', role: 'assistant' };
     const message2: TMessage = { content: 'How are you?', role: 'user' };
 
-    storage.add(chatSettings, message1.content, message1.role);
-    storage.add(chatSettings, message2.content, message2.role);
+    storage.add(data, message1.content, message1.role);
+    storage.add(data, message2.content, message2.role);
 
-    const messages = storage.get(chatSettings);
+    const messages = storage.get(data);
     expect(messages).toEqual([message1, message2]);
   });
 
   test('get messages for non-existent chat/user', () => {
-    const messages = storage.get(chatSettings);
+    const messages = storage.get(data);
     expect(messages).toEqual([]);
   });
 });

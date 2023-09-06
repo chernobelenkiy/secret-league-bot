@@ -1,2 +1,2 @@
-import './enkiyBoy';
-// import './psychoBot';
+// import './enkiyBoy';
+import './psychoBot';
