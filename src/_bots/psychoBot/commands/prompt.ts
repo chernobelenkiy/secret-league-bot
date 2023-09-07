@@ -19,6 +19,8 @@ export class PromptCommand implements ICommand {
     if (cmd.hasCommand(ctx, EPayloads.prompt)) {
       systemPrompt.savePrompt(ctx, ctx.data.text);
       cmd.resetCommand(ctx);
+      bot.sendMessage(ctx.data.chatId, `
+        Новый промпт: ${systemPrompt.getPrompt(ctx)}`);
     } else {
       cmd.saveCommand(ctx, EPayloads.prompt);
       bot.sendMessage(ctx.data.chatId, `

@@ -1,4 +1,5 @@
 import { ICommand, TContext } from '../../../types';
+import { EPayloads } from '../types';
 
 export class StartCommand implements ICommand {
   execute(ctx: TContext) {
@@ -6,8 +7,8 @@ export class StartCommand implements ICommand {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: 'Добавить системный промпт', callback_data: 'prompt' },
-            { text: 'Сбросить', callback_data: 'reset' },
+            { text: 'Добавить системный промпт', callback_data: EPayloads.prompt },
+            { text: 'Сбросить', callback_data: EPayloads.reset },
           ],
         ],
       },

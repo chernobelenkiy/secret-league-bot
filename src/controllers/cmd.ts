@@ -3,8 +3,8 @@ import { ICommandsManager, TContext, TChatData } from '../types';
 class CommandStorageManager {
   private storage: Map<string, string> = new Map();
 
-  private key({ fromId, chatId }: TChatData) {
-    return fromId ? `${chatId}_${fromId}` : chatId.toString();
+  private key({ chatId }: TChatData) {
+    return chatId.toString();
   }
 
   public add(data: TChatData, cmd: string) {
@@ -38,6 +38,7 @@ export class CommandsManager implements ICommandsManager {
   }
 
   canCommand(ctx: TContext) {
+    console.log(this.storage);
     return !!this.storage.get(ctx.data);
   }
 

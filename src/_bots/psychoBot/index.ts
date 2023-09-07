@@ -10,13 +10,14 @@ const bot = new TelegramBot(process.env.PSYCHO_KEY, { polling: true });
 
 bot.on('message', async (msg) => {
   if (!msg.text) return;
+  console.log('++++++++++++++++++++');
   
   let ctx = createContext(msg, bot);
-  const isCMDRelated = ctx.cmd?.canCommand(ctx) || ctx.cmd?.isCommand(msg.text);
+  const isCMDRelated = ctx.cmd.canCommand(ctx) || ctx.cmd.isCommand(msg.text);
   
   console.group();
   console.log('message: ', msg.text);
-  console.log('ctx: ', ctx);
+  console.log('data ', ctx.data);
   console.groupEnd();
   
   if (ctx.userAccess.canReply && !isCMDRelated) {
