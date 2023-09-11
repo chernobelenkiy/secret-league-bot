@@ -83,7 +83,7 @@ export class PromptManager implements IPromptManager {
       const completion = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: ctx.prompts,
-        temperature: 0.5,
+        temperature: 0.1,
       });
       const response = completion.data.choices[0].message?.content;
       if (!response) return; 
