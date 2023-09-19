@@ -10,8 +10,12 @@ class Messages {
   public add(content: string, role: TRole) {
     this.queue.push({ content, role });
     if (this.queue.length > LIMIT) {
-      this.queue.shift();
+      this.shift();
     }
+  }
+
+  public shift() {
+    this.queue.shift();
   }
 
   public getMessages(): TMessage[] {
@@ -44,6 +48,11 @@ export class MessageStorageManager {
   public reset(data: TChatData): void {
     const key = this.key(data);
     this.storage.delete(key);
+  }
+
+  public shift(data: TChatData): void {
+    const key = this.key(data);
+    this.storage.get(key)?.shift();
   }
 }
 
@@ -96,6 +105,10 @@ export class PromptManager implements IPromptManager {
         console.error(error.response.status, error.response.data);
       } else {
         console.error(`Error with OpenAI API request: ${error.message}`);
+      }
+
+      if (error.code === 'context_length_exceeded') {
+        this.storage.shift(ctx.data);
       }
     }
   };
