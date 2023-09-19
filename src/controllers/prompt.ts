@@ -77,8 +77,8 @@ export class PromptManager implements IPromptManager {
     this.storage.reset(ctx.data);
   }
 
-  createPrompts(ctx: TContext, text: string) {
-    this.saveMessage(ctx, 'user', text);
+  createPrompts(ctx: TContext, text?: string) {
+    text && this.saveMessage(ctx, 'user', text);
     return Object.assign(ctx, {
       prompts: [
         { role: 'system', content: ctx.systemPrompt.generate(ctx) },
@@ -109,7 +109,7 @@ export class PromptManager implements IPromptManager {
 
       if (error.code === 'context_length_exceeded') {
         this.storage.shift(ctx.data);
-        this.generate(ctx);
+        this.generate(ctx.prompt.createPrompts(ctx));
       }
     }
   };

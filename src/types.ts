@@ -35,7 +35,7 @@ export interface IPromptManager {
   getMessages(ctx: TContext): TMessage[];
   saveMessage(ctx: TContext, role: TRole, text: string): void;
   resetMessags(ctx: TContext): void;
-  createPrompts(ctx: TContext, text: string): TContext;
+  createPrompts(ctx: TContext, text?: string): TContext;
 }
 
 export interface ISystemPromptManager {
