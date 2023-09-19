@@ -109,6 +109,7 @@ export class PromptManager implements IPromptManager {
 
       if (error.code === 'context_length_exceeded') {
         this.storage.shift(ctx.data);
+        this.generate(ctx);
       }
     }
   };
