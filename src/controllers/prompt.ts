@@ -92,7 +92,7 @@ export class PromptManager implements IPromptManager {
   generate = async (ctx: TContext) => {
     try {
       const completion = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo-16k",
+        model: "gpt-4",
         messages: ctx.prompts,
         temperature: 0.4,
       });
