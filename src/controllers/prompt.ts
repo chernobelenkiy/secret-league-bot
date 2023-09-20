@@ -10,12 +10,12 @@ class Messages {
   public add(content: string, role: TRole) {
     this.queue.push({ content, role });
     if (this.queue.length > LIMIT) {
-      this.shift();
+      this.queue.shift();
     }
   }
 
-  public shift() {
-    this.queue.shift();
+  public slice(n = 1) {
+    this.queue = this.queue.slice(n);
   }
 
   public getMessages(): TMessage[] {
@@ -50,9 +50,11 @@ export class MessageStorageManager {
     this.storage.delete(key);
   }
 
-  public shift(data: TChatData): void {
+  public slice(data: TChatData): void {
     const key = this.key(data);
-    this.storage.get(key)?.shift();
+    const storage = this.storage.get(key) || new Messages();
+    storage.slice(4);
+    this.storage.set(key, storage);
   }
 }
 
@@ -90,9 +92,9 @@ export class PromptManager implements IPromptManager {
   generate = async (ctx: TContext) => {
     try {
       const completion = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
+        model: "gpt-3.5-turbo-16k",
         messages: ctx.prompts,
-        temperature: 0.1,
+        temperature: 0.4,
       });
       const response = completion.data.choices[0].message?.content;
       if (!response) return; 
