@@ -15,10 +15,11 @@ const sendOptions: TelegramBot.SendMessageOptions = {
 
 export class PromptCommand implements ICommand {
   execute(ctx: TContext) {
-    const { cmd, systemPrompt, bot } = ctx;
+    const { cmd, systemPrompt, bot, prompt } = ctx;
     if (cmd.hasCommand(ctx, EPayloads.prompt)) {
       systemPrompt.savePrompt(ctx, ctx.data.text);
       cmd.resetCommand(ctx);
+      prompt.resetMessags(ctx);
       bot.sendMessage(ctx.data.chatId, `
         Новый промпт: ${systemPrompt.getPrompt(ctx)}`);
     } else {

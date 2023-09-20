@@ -2,7 +2,7 @@ import { Configuration, OpenAIApi } from 'openai';
 import { removeHashtags } from '../helpers';
 import { TMessage, TRole, TContext, TChatData, IPromptManager } from '../types';
 
-const LIMIT = 40;
+const LIMIT = 20;
 
 class Messages {
   private queue: TMessage[] = [];
@@ -111,6 +111,8 @@ export class PromptManager implements IPromptManager {
 
       if (error.code === 'context_length_exceeded') {
         this.storage.slice(ctx.data);
+        console.log('slicing....');
+        console.log(this.storage);
         this.generate(ctx.prompt.createPrompts(ctx));
       }
     }
