@@ -6,6 +6,6 @@ if (process.env.PSYCHO === '1') {
   require('./psychoBot');
 }
 
-if (process.env.MEDATION === '1') {
+if (process.env.MEDIATION === '1') {
   require('./MediationBot');
 }
