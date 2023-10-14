@@ -12,6 +12,12 @@ bot.on('message', async (msg) => {
   const botInfo = await bot.getMe();
   let ctx = createContext(msg, botInfo, bot);
 
+  console.group();
+  console.log('Mediation Bot');
+  console.log('message: ', msg.text);
+  console.log('ctx: ', ctx);
+  console.groupEnd();
+
   if (ctx.userAccess.canReply || ctx.userAccess.canReplyToUser) {
     ctx = ctx.prompt.createPrompts(ctx, msg.text);
     const response = await ctx.prompt.generate(ctx);
