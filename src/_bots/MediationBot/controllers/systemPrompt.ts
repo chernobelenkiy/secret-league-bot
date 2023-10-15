@@ -8,4 +8,3 @@ export class MediationSystemPrompt extends SystemPromptManager implements ISyste
     super(DEFAULT);
   }
 }
-

@@ -18,6 +18,7 @@ bot.on('message', async (msg) => {
   console.group();
   console.log('message: ', msg.text);
   console.log('data ', ctx.data);
+  console.log('userAccess: ', ctx.userAccess);
   console.groupEnd();
   
   if (ctx.userAccess.canReply && !isCMDRelated) {
