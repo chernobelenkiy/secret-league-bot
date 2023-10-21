@@ -1,5 +1,5 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { ICommand, TContext } from '../../../types';
+import { ICommand, TContext } from 'yes-bot-lib';
 import { EPayloads } from '../types';
 
 const sendOptions: TelegramBot.SendMessageOptions = {

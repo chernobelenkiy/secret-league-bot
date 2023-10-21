@@ -1,7 +1,5 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { TContext } from '../../types';
-import { PromptManager } from '../../controllers/prompt';
-import { CommandsManager } from '../../controllers/cmd';
+import { TContext, PromptManager, CommandsManager } from 'yes-bot-lib';
 import { EnkiySystemPrompt } from './controllers/systemPrompt';
 import { createUserAccess } from './helpers';
 

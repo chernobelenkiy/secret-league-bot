@@ -1,5 +1,5 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { extractHashtags } from '../../../helpers/hashTags';
+import { extractHashtags } from 'yes-bot-lib';
 
 const WHITE_LIST_IDS = process.env.WHITE_LIST_IDS?.split(',') || [];
 

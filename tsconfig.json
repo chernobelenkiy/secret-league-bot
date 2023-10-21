@@ -8,6 +8,6 @@
     "noEmit": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["index.ts"],
+  "include": ["index.ts", "node_modules/yes-bot-lib"],
   "exclude": ["node_modules"]
 }

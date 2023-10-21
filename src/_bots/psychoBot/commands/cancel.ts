@@ -1,4 +1,4 @@
-import { ICommand, TContext } from '../../../types';
+import { ICommand, TContext } from 'yes-bot-lib';
 import { EPayloads } from '../types';
 
 export class CancelCommand implements ICommand {

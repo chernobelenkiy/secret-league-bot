@@ -1,5 +1,4 @@
-import { SystemPromptManager } from '../../../controllers/systemPrompt';
-import { ISystemPromptManager, TContext } from '../../../types';
+import { SystemPromptManager, ISystemPromptManager } from 'yes-bot-lib';
 
 const DEFAULT = 'Ты бот для психологической самодиагностики. Диагностика проходит в три этапа.'
 

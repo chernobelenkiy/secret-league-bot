@@ -1,5 +1,4 @@
-import { CommandsManager } from '../../../controllers/cmd';
-import { ICommandsManager, TContext } from '../../../types';
+import { ICommandsManager, TContext, CommandsManager } from 'yes-bot-lib';
 import { PromptCommand, StartCommand, ResetCommand, CancelCommand } from '../commands';
 import { EPayloads } from '../types';
 

@@ -1,4 +1,4 @@
-import { ICommand, TContext } from '../../../types';
+import { ICommand, TContext } from 'yes-bot-lib';
 
 export class ResetCommand implements ICommand {
   execute(ctx: TContext) {
