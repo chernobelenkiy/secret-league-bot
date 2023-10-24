@@ -7,7 +7,6 @@ import { createUserAccess } from './helpers';
 export const createContext = (msg: TelegramBot.Message, bot: TelegramBot): TContext => ({
   data: {
     chatId: msg.chat.id,
-    fromId: msg.from?.id,
     text: msg.text || '',
   },
   bot,

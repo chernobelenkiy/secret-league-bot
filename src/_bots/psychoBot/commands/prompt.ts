@@ -17,6 +17,7 @@ export class PromptCommand implements ICommand {
   execute(ctx: TContext) {
     const { cmd, systemPrompt, bot, prompt } = ctx;
     if (cmd.hasCommand(ctx, EPayloads.prompt)) {
+      if (!ctx.data.text) return;
       systemPrompt.savePrompt(ctx, ctx.data.text);
       cmd.resetCommand(ctx);
       prompt.resetMessags(ctx);
