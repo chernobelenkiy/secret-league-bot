@@ -78,25 +78,16 @@ app.delete("/assistants/:id", async (req, res) => {
   }
 });
 
-// // Fetch threads for an assistant
-// app.get("/threads/:assistantId", async (req, res) => {
-//   try {
-//     const response = await fetch(
-//       `https://api.openai.com/v1/assistants/${req.params.assistantId}/threads`,
-//       {
-//         method: "GET",
-//         headers: {
-//           Authorization: `Bearer ${OPENAI_API_KEY}`,
-//         },
-//       }
-//     );
-//     const data = await response.json();
-//     res.json(data);
-//   } catch (error) {
-//     console.error("Error fetching threads:", error);
-//     res.status(500).json({ error: "Failed to fetch threads" });
-//   }
-// });
+// Fetch threads for an assistant
+app.post("/threads/:assistantId", async (req, res) => {
+  try {
+    const response = await openai.beta.threads.create();
+    res.json(response);
+  } catch (error) {
+    console.error("Error fetching threads:", error);
+    res.status(500).json({ error: "Failed to fetch threads" });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

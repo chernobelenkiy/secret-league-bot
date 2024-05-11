@@ -35,8 +35,8 @@ function populateTable(assistants) {
           <td>${assistant.model}</td>
           <td>
               <button class="btn btn-primary btn-sm" onclick="editAssistant('${assistant.metadata.botName}', '${assistant.id}', '${assistant.name}', '${assistant.description}', '${assistant.instructions}')">Edit</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteAssistant('${assistant.assistantId}')">Delete</button>
-              <button class="btn btn-info btn-sm" onclick="viewThreads('${assistant.assistantId}')">Threads</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteAssistant('${assistant.id}')">Delete</button>
+              <button class="btn btn-info btn-sm" onclick="createThread('${assistant.id}')">Create Thread</button>
           </td>
       `;
   });
@@ -82,17 +82,14 @@ function deleteAssistant(assistantId) {
     .catch((error) => console.error("Error deleting assistant:", error));
 }
 
-function viewThreads(assistantId) {
-  fetch(`/threads/${assistantId}`)
+function createThread(assistantId) {
+  fetch(`/threads/${assistantId}`, {
+    method: "POST",
+  })
     .then((response) => response.json())
     .then((data) => {
-      const threadsList = document.getElementById("threadsList");
-      threadsList.innerHTML = data.threads
-        .map((thread) => `<p>${thread.content}</p>`)
-        .join("");
-      new bootstrap.Modal(document.getElementById("threadsModal")).show();
-    })
-    .catch((error) => console.error("Error fetching threads:", error));
+      console.log(data);
+    });
 }
 
 function editAssistant(botName, id, name, description, instructions) {
