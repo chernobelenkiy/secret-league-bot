@@ -6,6 +6,7 @@
   "scripts": {
     "start": "ts-node index.ts",
     "dev": "ts-node-dev index.ts",
+    "server": "node server.mjs",
     "test": "jest"
   },
   "repository": {
@@ -21,8 +22,11 @@
   "dependencies": {
     "@types/jest": "^29.5.4",
     "@types/node-telegram-bot-api": "^0.61.6",
+    "body-parser": "^1.20.2",
     "dotenv": "^10.0.0",
+    "express": "^4.19.2",
     "jest": "^29.6.4",
+    "node-fetch": "^3.3.2",
     "node-telegram-bot-api": "^0.61.0",
     "openai": "^3.3.0",
     "ts-jest": "^29.1.1",
