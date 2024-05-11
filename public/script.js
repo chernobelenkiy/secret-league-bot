@@ -11,12 +11,14 @@ document
     event.preventDefault();
     const assistantId = document.getElementById("assistantId").value;
     const botName = document.getElementById("botName").value;
-    const prompt = document.getElementById("systemPrompt").value;
+    const description = document.getElementById("description").value;
+    const instructions = document.getElementById("instructions").value;
+    const name = document.getElementById("name").value;
 
     if (assistantId) {
-      updateAssistant(assistantId, prompt);
+      updateAssistant(assistantId, description, name, instructions);
     } else {
-      createAssistant(botName, prompt);
+      createAssistant(botName, description, name, instructions);
     }
   });
 
@@ -26,22 +28,33 @@ function populateTable(assistants) {
   assistants.forEach((assistant) => {
     const tr = tbody.insertRow();
     tr.innerHTML = `
-          <td>${assistant.botName}</td>
-          <td>${assistant.assistantId}</td>
+          <td>${assistant.metadata.botName}</td>
+          <td>${assistant.id}</td>
+          <td>${assistant.description}</td>
+          <td>${assistant.instructions.substring(0, 150)}</td>
+          <td>${assistant.model}</td>
           <td>
-              <button class="btn btn-primary btn-sm" onclick="editAssistant('${assistant.assistantId}', '${assistant.botName}', '${assistant.systemPrompt}')">Edit</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteAssistant('${assistant.assistantId}')">Delete</button>
-              <button class="btn btn-info btn-sm" onclick="viewThreads('${assistant.assistantId}')">Threads</button>
+              <button class="btn btn-primary btn-sm" onclick="editAssistant('${
+                assistant.metadata.botName
+              }', '${assistant.id}', '${assistant.name}', '${
+      assistant.description
+    }', '${assistant.instructions}')">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteAssistant('${
+                assistant.assistantId
+              }')">Delete</button>
+              <button class="btn btn-info btn-sm" onclick="viewThreads('${
+                assistant.assistantId
+              }')">Threads</button>
           </td>
       `;
   });
 }
 
-function createAssistant(botName, prompt) {
+function createAssistant(botName, name, description, instructions) {
   fetch("/assistants", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ botName, prompt }),
+    body: JSON.stringify({ botName, name, description, instructions }),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -51,11 +64,11 @@ function createAssistant(botName, prompt) {
     .catch((error) => console.error("Error creating assistant:", error));
 }
 
-function updateAssistant(assistantId, prompt) {
+function updateAssistant(assistantId, name, description, instructions) {
   fetch(`/assistants/${assistantId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt }),
+    body: JSON.stringify({ description, name, instructions }),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -90,9 +103,15 @@ function viewThreads(assistantId) {
     .catch((error) => console.error("Error fetching threads:", error));
 }
 
-function editAssistant(assistantId, botName, systemPrompt) {
-  document.getElementById("assistantId").value = assistantId;
+function editAssistant(botName, id, name, description, instructions) {
+  document.getElementById("assistantId").value = id;
   document.getElementById("botName").value = botName;
-  document.getElementById("systemPrompt").value = systemPrompt;
+  document.getElementById("name").value = name;
+  document.getElementById("instructions").value = instructions;
+  document.getElementById("description").value = description;
+  new bootstrap.Modal(document.getElementById("assistantModal")).show();
+}
+
+function newAssistant() {
   new bootstrap.Modal(document.getElementById("assistantModal")).show();
 }

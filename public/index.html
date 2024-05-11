@@ -12,11 +12,17 @@
   <body>
     <div class="container mt-5">
       <h1>Telegram Bot Assistant Manager</h1>
+      <button class="btn btn-primary btn-sm" onclick="newAssistant()">
+        Add assistant
+      </button>
       <table class="table">
         <thead>
           <tr>
             <th>Telegram Bot</th>
             <th>Assistant ID</th>
+            <th>Assistant Description</th>
+            <th>Assistant Instructions</th>
+            <th>Assistant Model</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -49,16 +55,24 @@
               <input type="hidden" id="assistantId" name="assistantId" />
               <div class="mb-3">
                 <label for="botName" class="form-label">Bot Name:</label>
-                <input type="text" class="form-control" id="botName" disabled />
+                <input type="text" class="form-control" id="botName" />
               </div>
               <div class="mb-3">
-                <label for="systemPrompt" class="form-label"
-                  >System Prompt:</label
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="name" />
+              </div>
+              <div class="mb-3">
+                <label for="description" class="form-label">Description:</label>
+                <input type="text" class="form-control" id="description" />
+              </div>
+              <div class="mb-3">
+                <label for="instructions" class="form-label"
+                  >Instructions:</label
                 >
                 <input
                   type="text"
                   class="form-control"
-                  id="systemPrompt"
+                  id="instructions"
                   required
                 />
               </div>
