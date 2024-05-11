@@ -31,20 +31,12 @@ function populateTable(assistants) {
           <td>${assistant.metadata.botName}</td>
           <td>${assistant.id}</td>
           <td>${assistant.description}</td>
-          <td>${assistant.instructions.substring(0, 150)}</td>
+          <td>${assistant.instructions}</td>
           <td>${assistant.model}</td>
           <td>
-              <button class="btn btn-primary btn-sm" onclick="editAssistant('${
-                assistant.metadata.botName
-              }', '${assistant.id}', '${assistant.name}', '${
-      assistant.description
-    }', '${assistant.instructions}')">Edit</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteAssistant('${
-                assistant.assistantId
-              }')">Delete</button>
-              <button class="btn btn-info btn-sm" onclick="viewThreads('${
-                assistant.assistantId
-              }')">Threads</button>
+              <button class="btn btn-primary btn-sm" onclick="editAssistant('${assistant.metadata.botName}', '${assistant.id}', '${assistant.name}', '${assistant.description}', '${assistant.instructions}')">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteAssistant('${assistant.assistantId}')">Delete</button>
+              <button class="btn btn-info btn-sm" onclick="viewThreads('${assistant.assistantId}')">Threads</button>
           </td>
       `;
   });
