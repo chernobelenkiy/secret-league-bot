@@ -1,7 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
 
-const WHITE_LIST_IDS = process.env.ENKIY_WHITE_LIST_IDS?.split(",") || [];
-const ADMIN_IDS = process.env.ENKIY_ADMIN_IDs?.split(",") || [];
+const WHITE_LIST_IDS = process.env.NASTY_WHITE_LIST_IDS?.split(",") || [];
+const ADMIN_IDS = process.env.NASTY_ADMIN_IDS?.split(",") || [];
 
 export type TUserAccess = {
   fromOtherUser: boolean;
