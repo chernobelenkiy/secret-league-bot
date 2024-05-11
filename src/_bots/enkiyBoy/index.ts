@@ -1,29 +1,38 @@
-import TelegramBot from "node-telegram-bot-api";
-import { createContext } from "./ctx";
+import { YesBot, YesBotConfig } from "yes-bot-lib";
+import { onGeneratePrompt, onMessage, onCreateUserAccess } from "./helpers";
 
 if (!process.env.ENKIY_KEY) {
   throw new Error("Telegram API key is needed");
 }
 
-const bot = new TelegramBot(process.env.ENKIY_KEY, { polling: true });
+if (!process.env.OPENAI_API_KEY) {
+  throw new Error("OpenAI API key is needed");
+}
 
-bot.on("message", async (msg) => {
-  if (!msg.text) return;
-  const botInfo = await bot.getMe();
-  let ctx = createContext(msg, botInfo, bot);
+if (!process.env.ENKIY_THREAD_ID) {
+  throw new Error("OpenAI thread ID is needed");
+}
 
-  console.group();
-  console.log("message: ", msg.text);
-  console.log("ctx: ", ctx);
-  console.groupEnd();
+if (!process.env.ENKIT_ASSISTANT_ID) {
+  throw new Error("OpenAi Assistant ID is needed");
+}
 
-  if (ctx.userAccess.canReply || ctx.userAccess.canReplyToUser) {
-    ctx = ctx.prompt.createPrompts(ctx, msg.text);
-    const response = await ctx.prompt.generate(ctx);
-    if (!response) return;
-    await bot.sendMessage(msg.chat.id, response, {
-      reply_to_message_id: msg.message_id,
-      parse_mode: "HTML",
-    });
-  }
-});
+const config: YesBotConfig = {
+  keys: {
+    telegram: process.env.ENKIY_KEY,
+    openai: process.env.OPENAI_API_KEY,
+  },
+  commands: [],
+  callbacks: {
+    onGeneratePrompt,
+    onMessage,
+    onUserAccess: onCreateUserAccess,
+  },
+  openai: {
+    threadId: process.env.ENKIY_THREAD_ID,
+    assistantId: process.env.ENKIT_ASSISTANT_ID,
+  },
+};
+
+const bot = new YesBot(config);
+bot.start();
