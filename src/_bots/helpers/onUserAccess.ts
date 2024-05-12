@@ -17,6 +17,11 @@ export const onCreateUserAccess = async (
   const chatType = msg.chat.type;
   const userId = msg?.from?.id?.toString();
 
+  console.log("+++++");
+  console.log(msg.chat);
+  console.log(msg.from);
+  console.log("+++++");
+
   const fromAdmin =
     (await isMessageFromAdminInSupergroup(msg, bot)) ||
     adminIds.includes(userId as string);
