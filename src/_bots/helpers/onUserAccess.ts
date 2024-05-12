@@ -24,7 +24,8 @@ export const onCreateUserAccess = async (
   const isReplyToBot = fromId === botInfo?.id;
   const fromChannel = msg.from?.id?.toString() === "777000";
   const fromWhitelistedUserInPrivate =
-    chatType === "private" && whiteListIds.includes(userId as string);
+    chatType === "private" &&
+    (whiteListIds.includes(userId as string) || fromAdmin);
 
   const canReply = fromChannel || isReplyToBot || fromWhitelistedUserInPrivate;
 
