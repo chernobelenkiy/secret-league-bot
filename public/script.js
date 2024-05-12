@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("Fetching assistants...");
   fetch("/assistants")
     .then((response) => response.json())
     .then((data) => populateTable(data))
@@ -27,6 +28,7 @@ function populateTable(assistants) {
   tbody.innerHTML = ""; // Clear existing entries
   assistants.forEach((assistant) => {
     const tr = tbody.insertRow();
+    console.log(assistant.description);
     tr.innerHTML = `
           <td>${assistant.metadata.botName}</td>
           <td>${assistant.id}</td>
@@ -34,11 +36,23 @@ function populateTable(assistants) {
           <td>${assistant.instructions}</td>
           <td>${assistant.model}</td>
           <td>
-              <button class="btn btn-primary btn-sm" onclick="editAssistant('${assistant.metadata.botName}', '${assistant.id}', '${assistant.name}', '${assistant.description}', '${assistant.instructions}')">Edit</button>
+              <button class="btn btn-primary btn-sm btn-edit">Edit</button>
               <button class="btn btn-danger btn-sm" onclick="deleteAssistant('${assistant.id}')">Delete</button>
               <button class="btn btn-info btn-sm" onclick="createThread('${assistant.id}')">Create Thread</button>
           </td>
       `;
+    tr.getElementsByClassName("btn-edit")[0].addEventListener(
+      "click",
+      function () {
+        editAssistant(
+          assistant.metadata.botName,
+          assistant.id,
+          assistant.name,
+          assistant.description,
+          assistant.instructions
+        );
+      }
+    );
   });
 }
 

@@ -1,7 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { config as dotenvConfig } from "dotenv";
-import fetch from "node-fetch";
 import OpenAI from "openai";
 
 dotenvConfig(); // This loads the environment variables from .env file
