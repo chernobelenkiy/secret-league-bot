@@ -17,9 +17,10 @@ export const onCreateUserAccess = (
   const userId = msg?.from?.id?.toString();
 
   const fromId = msg.reply_to_message?.from?.id;
-  const fromChannel = chatType === "channel";
   const isReplyToBot = fromId === botInfo?.id;
   const fromAdmin = ADMIN_IDS.includes(userId as string);
+  const fromChannel =
+    (chatType === "channel" || chatType === "supergroup") && fromAdmin;
   const fromWhitelistedUserInPrivate =
     chatType === "private" && WHITE_LIST_IDS.includes(userId as string);
 
