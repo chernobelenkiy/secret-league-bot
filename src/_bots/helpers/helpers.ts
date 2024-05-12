@@ -4,7 +4,10 @@ export const isMessageFromAdminInSupergroup = async (
   msg: TelegramBot.Message,
   bot: TelegramBot
 ): Promise<boolean> => {
-  if (msg.chat.type !== "supergroup" || !msg.from?.id) {
+  if (
+    (msg.chat.type !== "supergroup" && msg.chat.type !== "channel") ||
+    !msg.from?.id
+  ) {
     return false;
   }
 
