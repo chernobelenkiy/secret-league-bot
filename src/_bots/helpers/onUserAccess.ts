@@ -28,6 +28,10 @@ export const onCreateUserAccess = async (
   const fromId = msg.reply_to_message?.from?.id;
   const isReplyToBot = fromId === botInfo?.id;
   const fromChannel = msg.from?.id?.toString() === "777000";
+  console.log("+++++++");
+  console.log(msg.from?.id?.toString());
+  console.log(msg.from?.id?.toString() === "777000");
+  console.log("_______");
   const fromWhitelistedUserInPrivate =
     chatType === "private" && whiteListIds.includes(userId as string);
 
