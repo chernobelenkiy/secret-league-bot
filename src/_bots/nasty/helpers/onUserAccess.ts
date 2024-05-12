@@ -7,6 +7,7 @@ export type TUserAccess = {
   fromAdmin: boolean;
   canReply: boolean;
   fromPrivate: boolean;
+  userId: string | undefined;
 };
 
 export const onCreateUserAccess = (
@@ -30,5 +31,6 @@ export const onCreateUserAccess = (
     fromAdmin,
     fromPrivate: chatType === "private",
     canReply,
+    userId,
   };
 };
