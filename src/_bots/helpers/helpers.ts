@@ -10,6 +10,7 @@ export const isMessageFromAdminInSupergroup = async (
 
   try {
     const chatMember = await bot.getChatMember(msg.chat.id, msg.from.id);
+    console.log("chatMember: ", chatMember);
     return (
       chatMember.status === "administrator" || chatMember.status === "creator"
     );
