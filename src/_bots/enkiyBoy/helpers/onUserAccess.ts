@@ -4,11 +4,9 @@ const WHITE_LIST_IDS = process.env.ENKIY_WHITE_LIST_IDS?.split(",") || [];
 const ADMIN_IDS = process.env.ENKIY_ADMIN_IDS?.split(",") || [];
 
 export type TUserAccess = {
-  fromOtherUser: boolean;
   fromAdmin: boolean;
-  fromChannelOrSupergroup: boolean;
   canReply: boolean;
-  canReplyToUser: boolean;
+  fromPrivate: boolean;
 };
 
 export const onCreateUserAccess = (
@@ -17,29 +15,19 @@ export const onCreateUserAccess = (
 ): TUserAccess => {
   const chatType = msg.chat.type;
   const userId = msg?.from?.id?.toString();
-  const whiteListUser = !!userId && WHITE_LIST_IDS.includes(userId);
+
   const fromId = msg.reply_to_message?.from?.id;
   const fromChannel = chatType === "channel";
-  const fromSupergroup = chatType === "supergroup";
+  const isReplyToBot = fromId === botInfo?.id;
   const fromAdmin = ADMIN_IDS.includes(userId as string);
+  const fromWhitelistedUserInPrivate =
+    chatType === "private" && WHITE_LIST_IDS.includes(userId as string);
 
-  const fromOtherUser =
-    !fromAdmin &&
-    (fromSupergroup || chatType === "private" || chatType === "group");
-
-  const canReply =
-    fromAdmin ||
-    ((fromId === botInfo?.id || fromChannel) &&
-      (fromChannel || fromSupergroup));
-
-  const canReplyToUser =
-    chatType === "private" && !!userId && (fromAdmin || whiteListUser);
+  const canReply = fromChannel || isReplyToBot || fromWhitelistedUserInPrivate;
 
   return {
-    fromOtherUser,
     fromAdmin,
-    fromChannelOrSupergroup: fromChannel || fromSupergroup,
+    fromPrivate: chatType === "private",
     canReply,
-    canReplyToUser,
   };
 };

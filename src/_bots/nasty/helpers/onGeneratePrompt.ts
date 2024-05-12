@@ -11,7 +11,7 @@ export const onGeneratePrompt = (ctx: TContext, content: string) => {
       '""" Ты отвечаешь обычному пользователю канала. Можешь чуть оскорбить.';
   }
   //@ts-ignore
-  if (userAccess.fromChannelOrSupergroup) {
+  if (userAccess.fromPrivate) {
     content += '""" Ты отвечаешь на сообщение из канала.';
   } else {
     content += '""" Ты отвечаешь на сообщение из личных сообщений.';

@@ -1,5 +1,4 @@
 import { TContext } from "yes-bot-lib";
-import { TUserAccess } from "./onUserAccess";
 
 export const onGeneratePrompt = (ctx: TContext, content: string) => {
   const userAccess = ctx.userAccess;
@@ -12,7 +11,7 @@ export const onGeneratePrompt = (ctx: TContext, content: string) => {
       '""" Ты отвечаешь обычному пользователю канала. Постарайся быть ему полезен.';
   }
   //@ts-ignore
-  if (userAccess.fromChannelOrSupergroup) {
+  if (!userAccess.fromPrivate) {
     content += '""" Ты отвечаешь на сообщение из канала.';
   } else {
     content += '""" Ты отвечаешь на сообщение из личных сообщений.';
