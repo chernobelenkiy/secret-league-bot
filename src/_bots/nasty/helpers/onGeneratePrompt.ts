@@ -4,9 +4,11 @@ export const onGeneratePrompt = (ctx: TContext, content: string) => {
   const userAccess = ctx.userAccess;
   //@ts-ignore
   if (userAccess.fromAdmin) {
-    content += '""" Ты отвечаешь на сообщения Насти';
+    content +=
+      '""" Ты отвечаешь на сообщения Насти. Шути черным юмором и резко.';
   } else {
-    content += '""" Ты отвечаешь обычному пользователю канала.';
+    content +=
+      '""" Ты отвечаешь обычному пользователю канала. Можешь чуть оскорбить.';
   }
   //@ts-ignore
   if (userAccess.fromChannelOrSupergroup) {
