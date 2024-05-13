@@ -4052,10 +4052,10 @@ yargs@^17.3.1:
     y18n "^5.0.5"
     yargs-parser "^21.1.1"
 
-yes-bot-lib@^2.0.7:
-  version "2.0.7"
-  resolved "https://registry.npmjs.org/yes-bot-lib/-/yes-bot-lib-2.0.7.tgz"
-  integrity sha512-iH9YMVxJNF5lfuLF1mF56ITD3Msw+onlayaRRIK/Df/lvFtFJfNH+dnaJ2CJ6ed8Vo5ZvvGb78aSFJJQNwrEzA==
+yes-bot-lib@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.npmjs.org/yes-bot-lib/-/yes-bot-lib-2.0.9.tgz"
+  integrity sha512-7DLxu1wzUtyPuFe30iGIYLJMw8OGMZVp5/wIkNxz3OATLKOg5ImCbXlqLhFWEnLkkeQ/ju55TiAFoXiGWkVCTA==
   dependencies:
     "@types/jest" "^29.5.12"
     "@types/node" "^20.4.5"
