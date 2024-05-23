@@ -11,15 +11,16 @@ document
   .addEventListener("submit", function (event) {
     event.preventDefault();
     const assistantId = document.getElementById("assistantId").value;
+    const model = document.getElementById("botModel").value;
     const botName = document.getElementById("botName").value;
     const description = document.getElementById("description").value;
     const instructions = document.getElementById("instructions").value;
     const name = document.getElementById("name").value;
 
     if (assistantId) {
-      updateAssistant(assistantId, description, name, instructions);
+      updateAssistant(assistantId, description, model, name, instructions);
     } else {
-      createAssistant(botName, description, name, instructions);
+      createAssistant(botName, model, description, name, instructions);
     }
   });
 
@@ -31,6 +32,7 @@ function populateTable(assistants) {
     console.log(assistant.description);
     tr.innerHTML = `
           <td>${assistant.metadata.botName}</td>
+          <td>${assistant.model}</td>
           <td>${assistant.id}</td>
           <td>${assistant.description}</td>
           <td>${assistant.instructions}</td>
@@ -46,6 +48,7 @@ function populateTable(assistants) {
       function () {
         editAssistant(
           assistant.metadata.botName,
+          assistant.model,
           assistant.id,
           assistant.name,
           assistant.description,
@@ -56,11 +59,11 @@ function populateTable(assistants) {
   });
 }
 
-function createAssistant(botName, name, description, instructions) {
+function createAssistant(botName, model, name, description, instructions) {
   fetch("/assistants", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ botName, name, description, instructions }),
+    body: JSON.stringify({ botName, model, name, description, instructions }),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -70,11 +73,11 @@ function createAssistant(botName, name, description, instructions) {
     .catch((error) => console.error("Error creating assistant:", error));
 }
 
-function updateAssistant(assistantId, name, description, instructions) {
+function updateAssistant(assistantId, name, model, description, instructions) {
   fetch(`/assistants/${assistantId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ description, name, instructions }),
+    body: JSON.stringify({ description, name, model, instructions }),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -106,8 +109,9 @@ function createThread(assistantId) {
     });
 }
 
-function editAssistant(botName, id, name, description, instructions) {
+function editAssistant(botName, model, id, name, description, instructions) {
   document.getElementById("assistantId").value = id;
+  document.getElementById("botModel").value = model;
   document.getElementById("botName").value = botName;
   document.getElementById("name").value = name;
   document.getElementById("instructions").value = instructions;

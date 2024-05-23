@@ -34,14 +34,14 @@ app.get("/assistants", async (req, res) => {
 
 // Create a new assistant
 app.post("/assistants", async (req, res) => {
-  const { botName, name, description, instructions } = req.body;
+  const { botName, name, description, instructions, model } = req.body;
   try {
     const assistant = await openai.beta.assistants.create({
       instructions: instructions,
       name: name,
       description: description,
       metadata: { botName },
-      model: "gpt-4-turbo",
+      model: model || "gpt-4o",
     });
     res.json(assistant);
   } catch (error) {
@@ -52,12 +52,13 @@ app.post("/assistants", async (req, res) => {
 
 // Update an existing assistant
 app.put("/assistants/:id", async (req, res) => {
-  const { name, description, instructions } = req.body;
+  const { name, description, instructions, model } = req.body;
   try {
     const assistant = await openai.beta.assistants.update(req.params.id, {
       instructions: instructions,
       name: name,
       description: description,
+      model: model || "gpt-4o",
     });
     res.json(assistant);
   } catch (error) {
